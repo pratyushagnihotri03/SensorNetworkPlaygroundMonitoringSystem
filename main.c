@@ -5,11 +5,7 @@
 #include "vh400.h"
 #include "dev/sky-sensors.h"
 #include "dev/light-sensor.h"
-
-#define ID_SINK 1//201
-#define ID_MOIST1 3//22998
-#define ID_LIGHT1 2//0
-
+#include "settings.h"
 
 /* unicast packet ptructure */ 
 struct my_packet{
