@@ -1,7 +1,10 @@
 #include <stdio.h>
 #include "contiki.h"
 #include "rimeaddr.h"
+#include "net/rime.h"
 #include "vh400.h"
+#include "dev/sky-sensors.h"
+#include "dev/light-sensor.h"
 
 #define ID_SINK 201
 #define ID_MOIST1 22998
@@ -10,8 +13,8 @@
 
 /* unicast packet ptructure */ 
 struct my_packet{
-		uint16_t  value1;
-		uint16_t  value1;
+	uint16_t  value1;
+	uint16_t  value2;
 };
 
 /* Unicast Receive Function */
@@ -30,6 +33,7 @@ recv(struct unicast_conn *c, const rimeaddr_t *from)
 	}
 	else if (id == ID_MOIST1) {
 		printf("moisture value from node %d.%d is %u\n", from->u8[0], from->u8[1], p->value1);
+	}
 }
 /* Unicast Connection */
 static const struct unicast_callbacks unicast_callbacks = {recv};
@@ -47,7 +51,9 @@ PROCESS_THREAD(main_process, ev, data)
 	PROCESS_BEGIN();
 
 	static struct my_packet p;
-	rimeaddr_t addr = {ID_SINK / 256, ID_SINK % 256};
+	rimeaddr_t addr;
+	addr.u8[0] = ID_SINK / 256;
+	addr.u8[1] = ID_SINK % 256;
 	uint16_t id = rimeaddr_node_addr.u8[1] * 256 + rimeaddr_node_addr.u8[0];
 
 	if (id == ID_MOIST1)
@@ -57,7 +63,7 @@ PROCESS_THREAD(main_process, ev, data)
 
 	unicast_open(&uc, 140, &unicast_callbacks);
 
-	if (id = ID_SINK) {
+	if (id == ID_SINK) {
 		// add something smart here
 		while(1);
 	}
