@@ -6,9 +6,9 @@
 #include "dev/sky-sensors.h"
 #include "dev/light-sensor.h"
 
-#define ID_SINK 201
-#define ID_MOIST1 22998
-#define ID_LIGHT1 0
+#define ID_SINK 1//201
+#define ID_MOIST1 3//22998
+#define ID_LIGHT1 2//0
 
 
 /* unicast packet ptructure */ 
@@ -52,9 +52,9 @@ PROCESS_THREAD(main_process, ev, data)
 
 	static struct my_packet p;
 	rimeaddr_t addr;
-	addr.u8[0] = ID_SINK / 256;
-	addr.u8[1] = ID_SINK % 256;
-	uint16_t id = rimeaddr_node_addr.u8[1] * 256 + rimeaddr_node_addr.u8[0];
+	static uint16_t id;
+
+	id = rimeaddr_node_addr.u8[1] * 256 + rimeaddr_node_addr.u8[0];
 
 	if (id == ID_MOIST1)
   		SENSORS_ACTIVATE(vh400);
@@ -65,7 +65,9 @@ PROCESS_THREAD(main_process, ev, data)
 
 	if (id == ID_SINK) {
 		// add something smart here
-		while(1);
+		while(1) {
+			PROCESS_YIELD();
+ 		}
 	}
 
    while(1) {
@@ -76,12 +78,15 @@ PROCESS_THREAD(main_process, ev, data)
 			p.value1 = vh400.value(ADC0);
 			printf("id=%4u moisture=%u\n", id, p.value1);
 		}
-		else if (id == ID_LIGHT1) {
+		if (id == ID_LIGHT1) { //else if
 			p.value1 = light_sensor.value(LIGHT_SENSOR_TOTAL_SOLAR);
 			printf("light_value_TOTALSOLAR my sensor = %u\n",p.value1);
 		}
 
 		packetbuf_copyfrom(&p,sizeof(struct my_packet));
+
+		addr.u8[0] = ID_SINK / 256;
+		addr.u8[1] = ID_SINK % 256;
 		unicast_send(&uc, &addr);
     }
     PROCESS_END();
