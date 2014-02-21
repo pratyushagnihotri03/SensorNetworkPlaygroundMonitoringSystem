@@ -63,7 +63,7 @@ PROCESS_THREAD(main_process, ev, data)
 
 	if (my_id == ID_SINK) {
 		// start actuators
-		printf(”PG:START\n”);
+		printf("PG:START\n");
 
 		// add something smart here
 		while(1) {
@@ -71,7 +71,7 @@ PROCESS_THREAD(main_process, ev, data)
  		}
 
 		// stop actuators
-		printf(”PG:ENG\n”);
+		printf("PG:ENG\n");
 	}
 
    while(1) {
