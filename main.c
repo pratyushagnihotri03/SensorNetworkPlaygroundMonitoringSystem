@@ -62,10 +62,16 @@ PROCESS_THREAD(main_process, ev, data)
 	unicast_open(&uc, 140, &unicast_callbacks);
 
 	if (my_id == ID_SINK) {
+		// start actuators
+		printf(”PG:START\n”);
+
 		// add something smart here
 		while(1) {
 			PROCESS_YIELD();
  		}
+
+		// stop actuators
+		printf(”PG:ENG\n”);
 	}
 
    while(1) {
