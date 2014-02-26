@@ -26,11 +26,11 @@ recv(struct unicast_conn *c, const rimeaddr_t *from)
 	uint16_t from_id = from->u8[1] * 256 + from->u8[0];
 
 	// test printf
-	if (from_id == ID_LIGHT1) {
+	if (from_id == ID_LIGHT) {
 		printf("Light Valueis from node = %d.%d are %u and %u\n", from->u8[0], from->u8[1], p->value1, p->value2);
 		printf("temperature = %u\n", p->value3);
 	}
-	else if (from_id == ID_MOIST1) {
+	else if (from_id == ID_MOIST) {
 		printf("moisture value from node %d.%d is %u\n", from->u8[0], from->u8[1], p->value1);
 	}
         else if ( from_id == ID_CO2) {
@@ -61,9 +61,9 @@ PROCESS_THREAD(main_process, ev, data)
 	addr.u8[0] = ID_SINK % 256;
 	addr.u8[1] = ID_SINK / 256;
 
-	if (my_id == ID_MOIST1)
+	if (my_id == ID_MOIST)
   		SENSORS_ACTIVATE(vh400);
-	else if (my_id == ID_LIGHT1) {
+	else if (my_id == ID_LIGHT) {
 		SENSORS_ACTIVATE(light_sensor);
 		SENSORS_ACTIVATE(sht11_sensor);
 	}
@@ -89,11 +89,11 @@ PROCESS_THREAD(main_process, ev, data)
 		etimer_set(&et, CLOCK_SECOND * 5);
 		PROCESS_WAIT_UNTIL(etimer_expired(&et));
 
-		if (my_id == ID_MOIST1) {
+		if (my_id == ID_MOIST) {
 			p.value1 = vh400.value(ADC0);
 			printf("my_id=%u moisture=%u\n", my_id, p.value1);
 		}
-		else if (my_id == ID_LIGHT1) {
+		else if (my_id == ID_LIGHT) {
 			p.value1 = light_sensor.value(LIGHT_SENSOR_TOTAL_SOLAR);
 			p.value2 = light_sensor.value(LIGHT_SENSOR_PHOTOSYNTHETIC);
 			p.value3 = sht11_sensor.value(SHT11_SENSOR_TEMP);
