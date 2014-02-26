@@ -3,8 +3,8 @@
 
 /* set node IDs here */
 #define ID_SINK 1
-#define ID_MOIST1 2
-#define ID_LIGHT1 3
+#define ID_MOIST 2
+#define ID_LIGHT 3
 #define ID_CO2 4
 
 #endif /* __SETTINGS_H__ */
