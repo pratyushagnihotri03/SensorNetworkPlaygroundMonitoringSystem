@@ -6,6 +6,7 @@ CONTIKI_PROJECT = main
 all: $(CONTIKI_PROJECT)
 
 CONTIKI_SOURCEFILES += vh400.c
+CONTIKI_SOURCEFILES += ds1000-sensor.c
 
 #CONTIKI = your-path-to-contiki
 ifndef CONTIKI
