@@ -5,6 +5,7 @@
 #include "vh400.h"
 #include "dev/sky-sensors.h"
 #include "dev/light-sensor.h"
+#include "ds1000-sensor.h"
 #include "settings.h"
 
 /* unicast packet ptructure */ 
