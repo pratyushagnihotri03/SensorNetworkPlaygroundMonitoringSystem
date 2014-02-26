@@ -29,6 +29,9 @@ recv(struct unicast_conn *c, const rimeaddr_t *from)
 	else if (from_id == ID_MOIST1) {
 		printf("moisture value from node %d.%d is %u\n", from->u8[0], from->u8[1], p->value1);
 	}
+        else if ( from_id == ID_CO2) {
+                printf("CO2 value (adc) from node %d.%d is %u\n", from->u8[0], from->u8[1], p->value1);
+        }
 }
 /* Unicast Connection */
 static const struct unicast_callbacks unicast_callbacks = {recv};
@@ -58,6 +61,8 @@ PROCESS_THREAD(main_process, ev, data)
   		SENSORS_ACTIVATE(vh400);
 	else if (my_id == ID_LIGHT1)
 		SENSORS_ACTIVATE(light_sensor);
+        else if (my_id == ID_CO2)
+                SENSORS_ACTIVATE(ds1000_sensor);
 
 	unicast_open(&uc, 140, &unicast_callbacks);
 
@@ -86,6 +91,10 @@ PROCESS_THREAD(main_process, ev, data)
 			p.value1 = light_sensor.value(LIGHT_SENSOR_TOTAL_SOLAR);
 			p.value2 = light_sensor.value(LIGHT_SENSOR_PHOTOSYNTHETIC);
 			printf("my_id=%u total_solar=%u photosynthetic=%u\n",my_id, p.value1, p.value2);
+		}
+		else if (my_id == ID_CO2) {
+			p.value1 = ds1000_sensor.value(SENSOR_CO2);
+			printf("my_id=%u CO2 Value (adc) =%u\n" ,my_id, p.value1);
 		}
 
 		packetbuf_copyfrom(&p,sizeof(struct my_packet));
