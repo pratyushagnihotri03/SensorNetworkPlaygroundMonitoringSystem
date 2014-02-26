@@ -5,6 +5,7 @@
 #include "vh400.h"
 #include "dev/sky-sensors.h"
 #include "dev/light-sensor.h"
+#include "dev/sht11-sensor.h"
 #include "ds1000-sensor.h"
 #include "settings.h"
 
@@ -12,6 +13,7 @@
 struct my_packet{
 	uint16_t  value1;
 	uint16_t  value2;
+	uint16_t	 value3;
 };
 
 /* Unicast Receive Function */
@@ -26,6 +28,7 @@ recv(struct unicast_conn *c, const rimeaddr_t *from)
 	// test printf
 	if (from_id == ID_LIGHT1) {
 		printf("Light Valueis from node = %d.%d are %u and %u\n", from->u8[0], from->u8[1], p->value1, p->value2);
+		printf("temperature = %u\n", p->value3);
 	}
 	else if (from_id == ID_MOIST1) {
 		printf("moisture value from node %d.%d is %u\n", from->u8[0], from->u8[1], p->value1);
@@ -60,10 +63,12 @@ PROCESS_THREAD(main_process, ev, data)
 
 	if (my_id == ID_MOIST1)
   		SENSORS_ACTIVATE(vh400);
-	else if (my_id == ID_LIGHT1)
+	else if (my_id == ID_LIGHT1) {
 		SENSORS_ACTIVATE(light_sensor);
-        else if (my_id == ID_CO2)
-                SENSORS_ACTIVATE(ds1000_sensor);
+		SENSORS_ACTIVATE(sht11_sensor);
+	}
+   else if (my_id == ID_CO2)
+		SENSORS_ACTIVATE(ds1000_sensor);
 
 	unicast_open(&uc, 140, &unicast_callbacks);
 
@@ -91,7 +96,9 @@ PROCESS_THREAD(main_process, ev, data)
 		else if (my_id == ID_LIGHT1) {
 			p.value1 = light_sensor.value(LIGHT_SENSOR_TOTAL_SOLAR);
 			p.value2 = light_sensor.value(LIGHT_SENSOR_PHOTOSYNTHETIC);
-			printf("my_id=%u total_solar=%u photosynthetic=%u\n",my_id, p.value1, p.value2);
+			p.value3 = sht11_sensor.value(SHT11_SENSOR_TEMP);
+			printf("my_id=%u total_solar=%u photosynthetic=%u\n" \
+					"temperature = %u humidity = %u\n",my_id, p.value1, p.value2, p.value3, sht11_sensor.value(SHT11_SENSOR_TEMP));
 		}
 		else if (my_id == ID_CO2) {
 			p.value1 = ds1000_sensor.value(SENSOR_CO2);
