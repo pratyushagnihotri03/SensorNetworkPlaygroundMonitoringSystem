@@ -18,6 +18,7 @@ enum {
   COMMAND_TYPE_TEMP_LOW,
   COMMAND_TYPE_TEMP_OK,
   COMMAND_TYPE_CO2_HIGH,
+  COMMAND_TYPE_CO2_OK,
   COMMAND_TYPE_LIGHT_LOW,
   COMMAND_TYPE_LIGHT_OK
 };
@@ -37,15 +38,24 @@ recv_runicast(struct runicast_conn *c, const rimeaddr_t *from, uint8_t seqno)
   p=(struct my_packet *)packetbuf_dataptr();
   
   if(p->type == COMMAND_TYPE_TEMP_LOW) {
-    printf("CO2 OK! received from %d.%d\n",
+    printf("TEMP LOW! received from %d.%d\n",
+           from->u8[0], from->u8[1]); }
+  else if(p->type == COMMAND_TYPE_TEMP_OK) {
+    printf("TEMP OK! received from %d.%d\n",
            from->u8[0], from->u8[1]); }
   if(p->type == COMMAND_TYPE_CO2_HIGH) {
     printf("CO2 HIGH! received from %d.%d\n",
+           from->u8[0], from->u8[1]); }
+  if(p->type == COMMAND_TYPE_CO2_OK) {
+    printf("CO2 OK! received from %d.%d\n",
            from->u8[0], from->u8[1]); }
   if(p->type == COMMAND_TYPE_LIGHT_LOW) {
     printf("LIGHT LOW! received from %d.%d\n",
            from->u8[0], from->u8[1]); }
 
+  if(p->type == COMMAND_TYPE_LIGHT_OK) {
+    printf("LIGHT OK! received from %d.%d\n",
+           from->u8[0], from->u8[1]); }
   
 }
 static void
@@ -95,7 +105,7 @@ PROCESS_THREAD(main_process, ev, data)
    else if (my_id == ID_CO2)
 		SENSORS_ACTIVATE(ds1000_sensor);
 
-	unicast_open(&uc, 140, &unicast_callbacks);
+	runicast_open(&uc, 140, &runicast_callbacks);
 
 	if (my_id == ID_SINK) {
 		// start actuators
@@ -118,10 +128,10 @@ PROCESS_THREAD(main_process, ev, data)
 			print_values();
 		}
 		else if (my_id == ID_LIGHT) {
-			print_values()
+			print_values();
 		}
 		else if (my_id == ID_CO2) {
-			print_values()
+			print_values();
 		}
 
 		packetbuf_copyfrom(&p,sizeof(struct my_packet));
