@@ -130,8 +130,8 @@ PROCESS_THREAD(main_process, ev, data)
 			value1 = light_sensor.value(LIGHT_SENSOR_TOTAL_SOLAR);
 			value2 = sht11_sensor.value(SHT11_SENSOR_HUMIDITY);
 			value3 = sht11_sensor.value(SHT11_SENSOR_TEMP);
-			temp_val= ((0.01 * value3 -32)* .55);
-			double humidity_val= (-4.0 + 405.0*value2/10000);
+			temp_val= ((-39.8) + (value3 * 0.01));
+			double humidity_val= (-2.0468 + (0.0367 * value2) + ( -1.5955E-6 * (pow(value2,2)) ) );
 			if (humidity_val>100){
 				humi_val = 100;
 				print_values("Humidity_Value :", humi_val );
