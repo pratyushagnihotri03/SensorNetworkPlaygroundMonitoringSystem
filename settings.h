@@ -7,4 +7,7 @@
 #define ID_LIGHT 3
 #define ID_CO2 4
 
+/* set threshold values here */
+#define THRESHOLD_CO2 0
+
 #endif /* __SETTINGS_H__ */

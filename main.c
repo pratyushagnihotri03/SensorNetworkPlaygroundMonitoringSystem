@@ -25,9 +25,6 @@ enum {
 
 #define MAX_RETRANSMISSIONS 4
 
-static double raw_voltage=0;
-static uint32_t ppm=0;
-static uint32_t adc=0;
 void print_values();
 
 /* Unicast Receive Function */
@@ -52,11 +49,9 @@ recv_runicast(struct runicast_conn *c, const rimeaddr_t *from, uint8_t seqno)
   if(p->type == COMMAND_TYPE_LIGHT_LOW) {
     printf("LIGHT LOW! received from %d.%d\n",
            from->u8[0], from->u8[1]); }
-
   if(p->type == COMMAND_TYPE_LIGHT_OK) {
     printf("LIGHT OK! received from %d.%d\n",
            from->u8[0], from->u8[1]); }
-  
 }
 static void
 sent_runicast(struct runicast_conn *c, const rimeaddr_t *to, uint8_t retransmissions)
@@ -87,7 +82,7 @@ PROCESS_THREAD(main_process, ev, data)
 {
 	static struct my_packet p;
 	static rimeaddr_t addr;
-	
+	static uint16_t value1, value2, value3;
 
 	PROCESS_EXITHANDLER(runicast_close(&uc);)
 	PROCESS_BEGIN();
@@ -125,13 +120,22 @@ PROCESS_THREAD(main_process, ev, data)
 		PROCESS_WAIT_UNTIL(etimer_expired(&et));
 
 		if (my_id == ID_MOIST) {
-			print_values();
+			value1 = vh400.value(ADC0);
+			print_values("moisture", value1);
 		}
 		else if (my_id == ID_LIGHT) {
-			print_values();
+			value1 = light_sensor.value(LIGHT_SENSOR_TOTAL_SOLAR);
+			value2 = light_sensor.value(LIGHT_SENSOR_PHOTOSYNTHETIC);
+			value3 = sht11_sensor.value(SHT11_SENSOR_TEMP);
+			print_values("Total solar", value1);
+			print_values("Photosynthetic", value2);
+			print_values("Temperature", value3);
 		}
 		else if (my_id == ID_CO2) {
-			print_values();
+			value1 = ((double)(ds1000_sensor.value(SENSOR_CO2)/4096.0)*2.5 * 1000) - 200;
+			print_values("CO2", value1);
+			if (value1 > THRESHOLD_CO2)
+				;//send CO2_HIGH to sink
 		}
 
 		packetbuf_copyfrom(&p,sizeof(struct my_packet));
@@ -141,12 +145,6 @@ PROCESS_THREAD(main_process, ev, data)
     PROCESS_END();
 }
 
-void print_values(){
-  adc = ds1000_sensor.value(SENSOR_CO2);
-  raw_voltage = (double)(adc/4096.0)*2.5;
-  ppm = (raw_voltage * 1000) - 200;
-	printf("CO2_reading: %u \n", ds1000_sensor.value(SENSOR_CO2));
-	printf("Raw_Voltage = %d mV\n", (int)(1000*raw_voltage)); 
-        printf("CO2 = %u ppm\n",ppm); 
-
+void print_values(char * name, uint16_t value){
+	printf("%s %u\n", name, value);
 }
