@@ -83,6 +83,9 @@ PROCESS_THREAD(main_process, ev, data)
 	static struct my_packet p;
 	static rimeaddr_t addr;
 	static uint16_t value1, value2, value3;
+	static int temp_val=0,humi_val=0;
+	static double raw_voltage=0;
+	static uint32_t adc=0;
 
 	PROCESS_EXITHANDLER(runicast_close(&uc);)
 	PROCESS_BEGIN();
@@ -121,22 +124,39 @@ PROCESS_THREAD(main_process, ev, data)
 
 		if (my_id == ID_MOIST) {
 			value1 = vh400.value(ADC0);
-			print_values("moisture", value1);
+			print_values("Moisture :", value1);
 		}
 		else if (my_id == ID_LIGHT) {
 			value1 = light_sensor.value(LIGHT_SENSOR_TOTAL_SOLAR);
-			value2 = light_sensor.value(LIGHT_SENSOR_PHOTOSYNTHETIC);
+			value2 = sht11_sensor.value(SHT11_SENSOR_HUMIDITY);
 			value3 = sht11_sensor.value(SHT11_SENSOR_TEMP);
-			print_values("Total solar", value1);
-			print_values("Photosynthetic", value2);
-			print_values("Temperature", value3);
+			temp_val= ((0.01 * value3 -32)* .55);
+			double humidity_val= (-4.0 + 405.0*value2/10000);
+			if (humidity_val>100){
+				humi_val = 100;
+				print_values("Humidity_Value :", humi_val );
+			}
+			else{
+				humi_val = humidity_val;
+				print_values("Humidity_Value :", humi_val );
+			}
+			print_values("Light_Sensor_ADC :", value1);
+			print_values("Humidity_ADC :", value2);
+			print_values("Temperature_ADC :", value3);
+			print_values("Temperature °C :", temp_val);
 		}
 		else if (my_id == ID_CO2) {
+
+			adc = ds1000_sensor.value(SENSOR_CO2);
+  			raw_voltage = (double)(adc/4096.0)*2.5; 
 			value1 = ((double)(ds1000_sensor.value(SENSOR_CO2)/4096.0)*2.5 * 1000) - 200;
-			print_values("CO2", value1);
+			printf("CO2_ADC: ", adc);
+			printf("CO2_Raw_Voltage :", raw_voltage);  
+			print_values("CO2 ppm:", value1);
 			if (value1 > THRESHOLD_CO2)
 				;//send CO2_HIGH to sink
 		}
+
 
 		packetbuf_copyfrom(&p,sizeof(struct my_packet));
 
