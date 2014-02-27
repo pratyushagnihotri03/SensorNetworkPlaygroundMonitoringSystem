@@ -76,7 +76,7 @@ static struct runicast_conn uc;
 PROCESS(main_process, "main");
 AUTOSTART_PROCESSES(&main_process);
 
-static struct etimer et;
+static struct etimer et,settling_time;
 static uint16_t my_id;
 PROCESS_THREAD(main_process, ev, data)
 {
@@ -89,6 +89,8 @@ PROCESS_THREAD(main_process, ev, data)
 
 	PROCESS_EXITHANDLER(runicast_close(&uc);)
 	PROCESS_BEGIN();
+	etimer_set(&settling_time, CLOCK_SECOND * 120);
+	PROCESS_WAIT_UNTIL(etimer_expired(&settling_time));
 
 	my_id = rimeaddr_node_addr.u8[1] * 256 + rimeaddr_node_addr.u8[0];
 	addr.u8[0] = ID_SINK % 256;
