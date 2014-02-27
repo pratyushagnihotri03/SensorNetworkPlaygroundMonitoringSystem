@@ -2,10 +2,10 @@
 #define __SETTINGS_H__
 
 /* set node IDs here */
-#define ID_SINK 1
-#define ID_MOIST 2
-#define ID_LIGHT 3
-#define ID_CO2 4
+#define ID_SINK 3001
+#define ID_MOIST 3003
+#define ID_LIGHT 3009
+#define ID_CO2 3002
 
 
 /* PePeromia Plant : set threshold values here */
