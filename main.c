@@ -245,7 +245,9 @@ PROCESS_THREAD(main_process, ev, data)
 				packetbuf_copyfrom(&p,sizeof(struct my_packet));
 				runicast_send(&uc, &addr, MAX_RETRANSMISSIONS);
 			}
-			else if (p.type != COMMAND_TYPE_MOIS_OK && value1 <= THRESHOLD_MOIS_HIGH && value1 >= THRESHOLD_MOIS_LOW){
+			else if (p.type != COMMAND_TYPE_MOIS_OK
+					&& value1 <= THRESHOLD_MOIS_HIGH - OFFSET_MOIST
+					&& value1 >= THRESHOLD_MOIS_LOW + OFFSET_MOIST){
 				p.type = COMMAND_TYPE_MOIS_OK;
 				packetbuf_copyfrom(&p,sizeof(struct my_packet));
 				runicast_send(&uc, &addr, MAX_RETRANSMISSIONS);

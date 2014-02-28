@@ -43,4 +43,8 @@
 #define THRESHOLD_HUMID_HIGH 40
 #endif //RIGHT
 
+
+//offset values for debouncing
+#define OFFSET_MOIST 100
+
 #endif /* __SETTINGS_H__ */
