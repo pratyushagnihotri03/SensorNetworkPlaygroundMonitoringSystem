@@ -1,8 +1,8 @@
 #ifndef __SETTINGS_H__
 #define __SETTINGS_H__
 
-#define RIGHT //peperomia
-//#define LEFT //kalanchoe
+//#define RIGHT //peperomia
+#define LEFT //kalanchoe
 
 /* set node IDs here */
 #define ID_LIGHT 3009
@@ -31,7 +31,7 @@
 #define THRESHOLD_HUMID_HIGH 40
 #endif //RIGHT
 
-#ifdef RIGHT //kalanchoe
+#ifdef LEFT //kalanchoe
 #define THRESHOLD_CO2_HIGH 81
 #define THRESHOLD_CO2_LOW 58
 #define THRESHOLD_LIGHT 640

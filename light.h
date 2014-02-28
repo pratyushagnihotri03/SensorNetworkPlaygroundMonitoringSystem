@@ -8,5 +8,7 @@
 #include "dev/sht11-sensor.h"
 
 uint8_t measure_light();
+uint8_t measure_temperature();
+uint8_t measure_humidity();
 
 #endif //__LIGHT_H__

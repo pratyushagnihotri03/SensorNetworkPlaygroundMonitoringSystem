@@ -9,7 +9,7 @@ uint8_t measure_co2()
 	co2 = ((double)(raw/4096.0)*2.5 * 1000) - 200;
 //	printf("CO2_ADC: ", adc);
 //	printf("CO2_Raw_Voltage :", raw_voltage);  
-	printf ("CO2 ppm: %d", (int)co2);
+	printf ("CO2 ppm: %d\n", (int)co2);
 //------------------------------cO2 Actuators------------------------ //
 	if(co2 < THRESHOLD_CO2_LOW ){
 		return COMMAND_TYPE_CO2_LOW;

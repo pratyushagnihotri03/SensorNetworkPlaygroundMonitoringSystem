@@ -177,8 +177,28 @@ PROCESS_THREAD(main_process, ev, data)
 
 		if (my_id == ID_MOIST)
 			cmd = measure_moisture();
-		else if (my_id == ID_LIGHT)
-			cmd = measure_light(); //internal sensors node
+		else if (my_id == ID_LIGHT) {  //internal sensors node
+			cmd = measure_light(); 
+			if (cmd != 0) {
+				p.type = cmd;
+				packetbuf_copyfrom(&p,sizeof(struct my_packet));
+				runicast_send(&uc, &addr, MAX_RETRANSMISSIONS);
+			}
+
+			cmd = measure_temperature();
+			if (cmd != 0) {
+				p.type = cmd;
+				packetbuf_copyfrom(&p,sizeof(struct my_packet));
+				runicast_send(&uc, &addr, MAX_RETRANSMISSIONS);
+			}
+
+			cmd = measure_humidity();
+			if (cmd != 0) {
+				p.type = cmd;
+				packetbuf_copyfrom(&p,sizeof(struct my_packet));
+				runicast_send(&uc, &addr, MAX_RETRANSMISSIONS);
+			}
+		}
 		else if (my_id == ID_CO2)
 			cmd = measure_co2();
 
