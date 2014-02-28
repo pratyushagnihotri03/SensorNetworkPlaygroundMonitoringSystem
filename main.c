@@ -185,14 +185,18 @@ PROCESS_THREAD(main_process, ev, data)
 	addr.u8[0] = ID_SINK % 256;
 	addr.u8[1] = ID_SINK / 256;
 
+	//wait for raspberry pi
+	etimer_set(&et, CLOCK_SECOND * 120);
+	PROCESS_WAIT_UNTIL(etimer_expired(&et));
+
 	if (my_id == ID_MOIST)
   		SENSORS_ACTIVATE(vh400);
 	else if (my_id == ID_LIGHT) {
 		SENSORS_ACTIVATE(light_sensor);
 		SENSORS_ACTIVATE(sht11_sensor);
 	}
-       else if (my_id == ID_CO2)
-		SENSORS_ACTIVATE(ds1000_sensor);
+	else if (my_id == ID_CO2)
+	SENSORS_ACTIVATE(ds1000_sensor);
 
 	runicast_open(&uc, 140, &runicast_callbacks);
 
