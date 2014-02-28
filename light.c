@@ -12,11 +12,11 @@ uint8_t measure_light()
 //------------------------------Light Actuators------------------------ //
 
 	if(state_light != COMMAND_TYPE_LIGHT_LOW && raw_light < THRESHOLD_LIGHT){
-		return COMMAND_TYPE_LIGHT_LOW;
+		return state_light = COMMAND_TYPE_LIGHT_LOW;
 	}
 	else if (state_light != COMMAND_TYPE_LIGHT_OK 
 		&& raw_light >= THRESHOLD_LIGHT + OFFSET_LIGHT) {
-		return COMMAND_TYPE_LIGHT_OK;
+		return state_light = COMMAND_TYPE_LIGHT_OK;
 	}
 
 	return 0;
@@ -37,16 +37,16 @@ uint8_t measure_humidity()
 //------------------------------HUMIDITY Actuators------------------------ //
 	if(state_humidity != COMMAND_TYPE_HUMID_LOW 
 		&& raw_humidity < THRESHOLD_HUMID_LOW) {
-		return COMMAND_TYPE_HUMID_LOW;
+		return state_humidity = COMMAND_TYPE_HUMID_LOW;
 	}
 	else if (state_humidity != COMMAND_TYPE_HUMID_HIGH
 		&& raw_humidity > THRESHOLD_HUMID_HIGH) {
-		return COMMAND_TYPE_HUMID_HIGH;
+		return state_humidity = COMMAND_TYPE_HUMID_HIGH;
 	}
 	else if (state_humidity != COMMAND_TYPE_HUMID_OK
 		&& raw_humidity <= THRESHOLD_HUMID_HIGH - OFFSET_HUMIDITY 
 		&& raw_humidity >= THRESHOLD_HUMID_LOW + OFFSET_HUMIDITY){
-		return COMMAND_TYPE_HUMID_OK;
+		return state_humidity = COMMAND_TYPE_HUMID_OK;
 	}
 
 	return 0;
@@ -55,26 +55,30 @@ uint8_t measure_humidity()
 uint8_t measure_temperature()
 {
 	static uint8_t raw_temp;
-	static int temperature;
+	static double temperature;
 	static uint8_t state_temp = 0;
+	static int temp2;
 
 	raw_temp = sht11_sensor.value(SHT11_SENSOR_TEMP);
-	temperature = ((0.01 * raw_temp -32)* .55);
+	temperature = 0.01 * raw_temp - 39.8;
 
-	//print_values("Temperature_ADC :", value3);
-	printf("Temperature °C: %d\n", temperature);
+	temp2 = (int)(temperature * -100) % 100;
+	if (temp2 < 0)
+		temp2 *= -1;
+
+	printf("Temperature °C: %d.%d\n", (int)temperature, temp2);
 
 //------------------------------Temperature Actuators------------------------ //
 	if(state_temp != COMMAND_TYPE_TEMP_LOW
-		&& raw_temp < THRESHOLD_TEMP_LOW ){
-		return COMMAND_TYPE_TEMP_LOW;
+		&& temperature < THRESHOLD_TEMP_LOW ){
+		return state_temp = COMMAND_TYPE_TEMP_LOW;
 	}
 	else if (state_temp != COMMAND_TYPE_TEMP_HIGH
-		&& raw_temp > THRESHOLD_TEMP_HIGH ){
-		return COMMAND_TYPE_TEMP_HIGH;
+		&& temperature > THRESHOLD_TEMP_HIGH ){
+		return state_temp = COMMAND_TYPE_TEMP_HIGH;
 	}
-	else if (raw_temp <=THRESHOLD_TEMP_HIGH   && raw_temp >= THRESHOLD_TEMP_LOW ){
-		return COMMAND_TYPE_TEMP_OK;
+	else if (temperature <=THRESHOLD_TEMP_HIGH   && temperature >= THRESHOLD_TEMP_LOW ){
+		return state_temp = COMMAND_TYPE_TEMP_OK;
 	}
 
 	return 0;

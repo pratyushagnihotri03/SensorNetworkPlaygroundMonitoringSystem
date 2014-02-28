@@ -2,7 +2,6 @@
 #include "contiki.h"
 #include "rimeaddr.h"
 #include "net/rime.h"
-#include "dev/sky-sensors.h"
 #include "sink.h"
 #include "moisture.h"
 #include "light.h"
@@ -144,31 +143,46 @@ PROCESS_THREAD(main_process, ev, data)
 	static struct my_packet p;
 	static rimeaddr_t addr;
 	static uint8_t cmd = 0;
+	static int offset;
 
 	PROCESS_EXITHANDLER(runicast_close(&uc);)
 	PROCESS_BEGIN();
+	runicast_open(&uc, 140, &runicast_callbacks);
 
 	my_id = rimeaddr_node_addr.u8[1] * 256 + rimeaddr_node_addr.u8[0];
 	addr.u8[0] = ID_SINK % 256;
 	addr.u8[1] = ID_SINK / 256;
 
-	//wait for raspberry pi
-	etimer_set(&et, CLOCK_SECOND * 120);
-	PROCESS_WAIT_UNTIL(etimer_expired(&et));
-
-	if (my_id == ID_MOIST)
+	if (my_id == ID_MOIST) {
+		offset = 1;
 		SENSORS_ACTIVATE(vh400);
+	}
 	else if (my_id == ID_LIGHT) {
+		offset = 2;
 		SENSORS_ACTIVATE(light_sensor);
 		SENSORS_ACTIVATE(sht11_sensor);
 	}
-	else if (my_id == ID_CO2)
-	SENSORS_ACTIVATE(ds1000_sensor);
+	else if (my_id == ID_CO2) {
+		offset = 3;
+		SENSORS_ACTIVATE(ds1000_sensor);
+	}
 
-	runicast_open(&uc, 140, &runicast_callbacks);
+	//wait for raspberry pi
+	etimer_set(&et, CLOCK_SECOND * (120 + offset));
+	PROCESS_WAIT_UNTIL(etimer_expired(&et));
 
 	if (my_id == ID_SINK) {
-		sink();
+		// start actuators
+		printf("PG:START\n");
+
+		// add something smart here
+		while(1) {
+			PROCESS_YIELD();
+		}
+
+		// stop actuators
+		printf("PG:ENG\n");
+		//sink();
 	}
 
 	while(1) {

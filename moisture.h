@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include "contiki.h"
 #include "settings.h"
+#include "dev/sky-sensors.h"
 #include "vh400.h"
 
 uint8_t measure_moisture();

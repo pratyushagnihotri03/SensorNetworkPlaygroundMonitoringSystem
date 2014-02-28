@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include "contiki.h"
 #include "settings.h"
+#include "dev/sky-sensors.h"
 #include "dev/light-sensor.h"
 #include "dev/sht11-sensor.h"
 

@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include "contiki.h"
 #include "settings.h"
+#include "dev/sky-sensors.h"
 #include "ds1000-sensor.h"
 
 uint8_t measure_co2();

@@ -1,22 +1,32 @@
 #ifndef __SETTINGS_H__
 #define __SETTINGS_H__
 
-//#define RIGHT //peperomia
-#define LEFT //kalanchoe
+#define RIGHT //peperomia
+//#define LEFT //kalanchoe
+//#define COOJA
 
 /* set node IDs here */
-#define ID_LIGHT 3009
-#define ID_CO2 3002
 
 #ifdef RIGHT //peperomia
 #define ID_SINK 3001
 #define ID_MOIST 3003
+#define ID_LIGHT 3009
+#define ID_CO2 3002
 #endif //RIGHT
 
 #ifdef LEFT //kalanchoe
 #define ID_SINK 3008
 #define ID_MOIST 3007
+#define ID_LIGHT 3009
+#define ID_CO2 3002
 #endif //LEFT
+
+#ifdef COOJA
+#define ID_SINK 1
+#define ID_MOIST 2
+#define ID_LIGHT 3
+#define ID_CO2 4
+#endif //COOJA
 
 /* set threshold values here */
 #ifdef RIGHT //peperomia
@@ -43,12 +53,24 @@
 #define THRESHOLD_HUMID_HIGH 40
 #endif //RIGHT
 
+#ifdef COOJA
+#define THRESHOLD_CO2_HIGH 81
+#define THRESHOLD_CO2_LOW 58
+#define THRESHOLD_LIGHT 640
+#define THRESHOLD_TEMP_HIGH 28 
+#define THRESHOLD_TEMP_LOW 24
+#define THRESHOLD_MOIS_LOW 1765 
+#define THRESHOLD_MOIS_HIGH 1950
+#define THRESHOLD_HUMID_LOW 20
+#define THRESHOLD_HUMID_HIGH 40
+#endif //COOJA
 
 //offset values for debouncing
 #define OFFSET_MOIST 100
 #define OFFSET_HUMIDITY 3
 #define OFFSET_LIGHT 40
 #define OFFSET_TEMP 0
+#define OFFSET_CO2 10
 
 #define MEASURING_PERIOD 5 //seconds
 
