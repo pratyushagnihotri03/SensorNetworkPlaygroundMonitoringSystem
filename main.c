@@ -103,20 +103,20 @@ recv_runicast(struct runicast_conn *c, const rimeaddr_t *from, uint8_t seqno)
 //-------------------HUMIDITY---------------------------
 
   if(p->type == COMMAND_TYPE_HUMID_LOW) {
-    printf("LIGHT LOW! received from %d.%d\n",
+    printf("HUMIDITY LOW! received from %d.%d\n",
            from->u8[0], from->u8[1]); 
  	//Turning on the Heater.
    	 printf("PG:HEAT ON\n");
 	}
   else if(p->type == COMMAND_TYPE_HUMID_OK) {
-    printf("TEMP OK! received from %d.%d\n",
+    printf("HUMIDITY OK! received from %d.%d\n",
            from->u8[0], from->u8[1]); 
 	//Turning off the Fan and Heater.
    	 printf("PG:FAN OFF\n");
 	 printf("PG:HEAT OFF\n");  
 	}
   else if(p->type == COMMAND_TYPE_HUMID_HIGH) {
-    printf("LIGHT OK! received from %d.%d\n",
+    printf("HUMIDITY HIGH! received from %d.%d\n",
            from->u8[0], from->u8[1]);
  	//Turning on the Fan.
    	 printf("PG:FAN ON\n"); 
@@ -125,19 +125,19 @@ recv_runicast(struct runicast_conn *c, const rimeaddr_t *from, uint8_t seqno)
 //-------------------SOIL MOISTURE-----------------------
 
   if(p->type == COMMAND_TYPE_MOIS_LOW) {
-    printf("LIGHT LOW! received from %d.%d\n",
+    printf("MOSITURE LOW! received from %d.%d\n",
            from->u8[0], from->u8[1]); 
  	//Give water to the plant.
    	 printf("! GIVE WATER !\n");
 	}
   else if(p->type == COMMAND_TYPE_MOIS_OK) {
-    printf("LIGHT OK! received from %d.%d\n",
+    printf("MOSITURE OK! received from %d.%d\n",
            from->u8[0], from->u8[1]);
  	//Turning off the heater.
    	 printf("PG:HEAT OFF\n"); 
 	}
   else if(p->type == COMMAND_TYPE_MOIS_HIGH) {
-    printf("LIGHT OK! received from %d.%d\n",
+    printf("MOSITURE HIGH! received from %d.%d\n",
            from->u8[0], from->u8[1]);
  	//Turning on the heater.
    	 printf("PG:HEAT ON\n");
