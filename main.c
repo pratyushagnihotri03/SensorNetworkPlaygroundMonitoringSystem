@@ -235,16 +235,19 @@ PROCESS_THREAD(main_process, ev, data)
 			printf ("Soil Moisture: %u.%u\n", (int)moisture, (int)(moisture * 100) % 100);
 
 //------------------------------MOISTURE Actuators------------------------ //
-			if(value1 < THRESHOLD_MOIS_LOW ){
+			if(p.type != COMMAND_TYPE_MOIS_LOW && value1 < THRESHOLD_MOIS_LOW) {
 				p.type = COMMAND_TYPE_MOIS_LOW;
+				packetbuf_copyfrom(&p,sizeof(struct my_packet));
 				runicast_send(&uc, &addr, MAX_RETRANSMISSIONS);
 			}
-			else if (value1 > THRESHOLD_MOIS_HIGH ){
+			else if (p.type != COMMAND_TYPE_MOIS_HIGH && value1 > THRESHOLD_MOIS_HIGH) {
 				p.type = COMMAND_TYPE_MOIS_HIGH;
+				packetbuf_copyfrom(&p,sizeof(struct my_packet));
 				runicast_send(&uc, &addr, MAX_RETRANSMISSIONS);
 			}
-			else if (value1 <=THRESHOLD_MOIS_HIGH   && value1 >= THRESHOLD_MOIS_LOW){
+			else if (p.type != COMMAND_TYPE_MOIS_OK && value1 <= THRESHOLD_MOIS_HIGH && value1 >= THRESHOLD_MOIS_LOW){
 				p.type = COMMAND_TYPE_MOIS_OK;
+				packetbuf_copyfrom(&p,sizeof(struct my_packet));
 				runicast_send(&uc, &addr, MAX_RETRANSMISSIONS);
 			}
 		}
@@ -265,36 +268,44 @@ PROCESS_THREAD(main_process, ev, data)
 
 			if(value1 < THRESHOLD_LIGHT ){
 				p.type = COMMAND_TYPE_LIGHT_LOW;
+				packetbuf_copyfrom(&p,sizeof(struct my_packet));
 				runicast_send(&uc, &addr, MAX_RETRANSMISSIONS);
 			}
 			else {
 				p.type = COMMAND_TYPE_LIGHT_OK;
+				packetbuf_copyfrom(&p,sizeof(struct my_packet));
 				runicast_send(&uc, &addr, MAX_RETRANSMISSIONS);
 			}
 //------------------------------Temperature Actuators------------------------ //
 			if(value3 < THRESHOLD_TEMP_LOW ){
 				p.type = COMMAND_TYPE_TEMP_LOW;
+				packetbuf_copyfrom(&p,sizeof(struct my_packet));
 				runicast_send(&uc, &addr, MAX_RETRANSMISSIONS);
 			}
 			else if (value3 > THRESHOLD_TEMP_HIGH ){
 				p.type = COMMAND_TYPE_TEMP_HIGH;
+				packetbuf_copyfrom(&p,sizeof(struct my_packet));
 				runicast_send(&uc, &addr, MAX_RETRANSMISSIONS);
 			}
 			else if (value3 <=THRESHOLD_TEMP_HIGH   && value3 >= THRESHOLD_TEMP_LOW ){
 				p.type = COMMAND_TYPE_TEMP_OK;
+				packetbuf_copyfrom(&p,sizeof(struct my_packet));
 				runicast_send(&uc, &addr, MAX_RETRANSMISSIONS);
 			}
 //------------------------------HUMIDITY Actuators------------------------ //
 			if(value2 < THRESHOLD_HUMID_LOW ){
 				p.type = COMMAND_TYPE_HUMID_LOW;
+				packetbuf_copyfrom(&p,sizeof(struct my_packet));
 				runicast_send(&uc, &addr, MAX_RETRANSMISSIONS);
 			}
 			else if (value2 > THRESHOLD_HUMID_HIGH ){
 				p.type = COMMAND_TYPE_HUMID_HIGH;
+				packetbuf_copyfrom(&p,sizeof(struct my_packet));
 				runicast_send(&uc, &addr, MAX_RETRANSMISSIONS);
 			}
 			else if (value2 <=THRESHOLD_HUMID_HIGH   && value2 >= THRESHOLD_HUMID_LOW){
 				p.type = COMMAND_TYPE_HUMID_OK;
+				packetbuf_copyfrom(&p,sizeof(struct my_packet));
 				runicast_send(&uc, &addr, MAX_RETRANSMISSIONS);
 			}
 		}
@@ -309,21 +320,20 @@ PROCESS_THREAD(main_process, ev, data)
 //------------------------------cO2 Actuators------------------------ //
 			if(value1 < THRESHOLD_CO2_LOW ){
 				p.type = COMMAND_TYPE_CO2_LOW;
+				packetbuf_copyfrom(&p,sizeof(struct my_packet));
 				runicast_send(&uc, &addr, MAX_RETRANSMISSIONS);
 			}
 			else if (value1 > THRESHOLD_CO2_HIGH ){
 				p.type = COMMAND_TYPE_CO2_HIGH;
+				packetbuf_copyfrom(&p,sizeof(struct my_packet));
 				runicast_send(&uc, &addr, MAX_RETRANSMISSIONS);
 			}
 			else if (value1 <=THRESHOLD_CO2_HIGH   && value1 >= THRESHOLD_CO2_LOW){
 				p.type = COMMAND_TYPE_CO2_OK;
+				packetbuf_copyfrom(&p,sizeof(struct my_packet));
 				runicast_send(&uc, &addr, MAX_RETRANSMISSIONS);
 			}
 		}
-
-		packetbuf_copyfrom(&p,sizeof(struct my_packet));
-
-		runicast_send(&uc, &addr, MAX_RETRANSMISSIONS);	
     }
     PROCESS_END();
 }
