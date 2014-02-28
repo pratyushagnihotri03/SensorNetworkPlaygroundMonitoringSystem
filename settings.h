@@ -46,6 +46,9 @@
 
 //offset values for debouncing
 #define OFFSET_MOIST 100
+#define OFFSET_HUMIDITY 3
+#define OFFSET_LIGHT 40
+#define OFFSET_TEMP 0
 
 #define MEASURING_PERIOD 5 //seconds
 
