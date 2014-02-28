@@ -10,7 +10,7 @@
 
 #ifdef RIGHT //peperomia
 #define ID_SINK 3001
-#define ID_MOIST 3003
+#define ID_MOIST 22998//3003
 #endif //RIGHT
 
 #ifdef LEFT //kalanchoe
@@ -25,8 +25,8 @@
 #define THRESHOLD_LIGHT 640
 #define THRESHOLD_TEMP_HIGH 28 
 #define THRESHOLD_TEMP_LOW 24
-#define THRESHOLD_MOIS_LOW 1765 
-#define THRESHOLD_MOIS_HIGH 1950
+#define THRESHOLD_MOIS_LOW 15.82//1765 
+#define THRESHOLD_MOIS_HIGH 21.17//1950
 #define THRESHOLD_HUMID_LOW 20
 #define THRESHOLD_HUMID_HIGH 40
 #endif //RIGHT

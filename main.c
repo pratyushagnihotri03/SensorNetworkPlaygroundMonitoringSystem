@@ -175,7 +175,7 @@ PROCESS_THREAD(main_process, ev, data)
 	static rimeaddr_t addr;
 	static uint16_t value1, value2, value3;
 	static int temp_val=0,humi_val=0;
-	static double raw_voltage=0;
+	static double raw_voltage = 0, moisture;
 	static uint32_t adc=0;
 
 	PROCESS_EXITHANDLER(runicast_close(&uc);)
@@ -214,19 +214,30 @@ PROCESS_THREAD(main_process, ev, data)
 		PROCESS_WAIT_UNTIL(etimer_expired(&et));
 
 		if (my_id == ID_MOIST) {
-			value1 = vh400.value(ADC0);
-			print_values("Moisture :", value1);
+			int v = vh400.value(ADC0);
+			raw_voltage = 3 * v / 4096.0;
+
+			if (raw_voltage < 1.1)
+				moisture = 10 * raw_voltage - 1;
+			else if (raw_voltage < 1.3)
+				moisture = 25 * raw_voltage - 17.5;
+			else if (raw_voltage < 1.82)
+				moisture = 48.08 * raw_voltage - 47.5;
+			else
+				moisture = 26.32 * raw_voltage - 7.89;
+
+			printf ("Soil Moisture: %u.%u\n", (int)moisture, (int)(moisture * 100) % 100);
 
 //------------------------------MOISTURE Actuators------------------------ //
-			if(value1 < THRESHOLD_MOIS_LOW ){
+			if(moisture < THRESHOLD_MOIS_LOW ){
 				p.type = COMMAND_TYPE_MOIS_LOW;
 				runicast_send(&uc, &addr, MAX_RETRANSMISSIONS);
 			}
-			else if (value1 > THRESHOLD_MOIS_HIGH ){
+			else if (moisture > THRESHOLD_MOIS_HIGH ){
 				p.type = COMMAND_TYPE_MOIS_HIGH;
 				runicast_send(&uc, &addr, MAX_RETRANSMISSIONS);
 			}
-			else if (value1 <=THRESHOLD_MOIS_HIGH   && value1 >= THRESHOLD_MOIS_LOW){
+			else if (moisture <=THRESHOLD_MOIS_HIGH   && moisture >= THRESHOLD_MOIS_LOW){
 				p.type = COMMAND_TYPE_MOIS_OK;
 				runicast_send(&uc, &addr, MAX_RETRANSMISSIONS);
 			}
