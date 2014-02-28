@@ -9,6 +9,8 @@
 #include "ds1000-sensor.h"
 #include "settings.h"
 
+#define MAX_RETRANSMISSIONS 4
+
 /* unicast packet ptructure */ 
 struct my_packet{
 	uint8_t type;
@@ -36,9 +38,9 @@ enum {
   COMMAND_TYPE_MOIS_HIGH
 };
 
-#define MAX_RETRANSMISSIONS 4
-
-void print_values();
+void print_values(char * name, uint16_t value){
+	printf("%s %u\n", name, value);
+}
 
 /* Unicast Receive Function */
 static void
@@ -218,8 +220,8 @@ PROCESS_THREAD(main_process, ev, data)
 		PROCESS_WAIT_UNTIL(etimer_expired(&et));
 
 		if (my_id == ID_MOIST) {
-			int v = vh400.value(ADC0);
-			raw_voltage = 3 * v / 4096.0;
+			value1 = vh400.value(ADC0);
+			raw_voltage = 3 * value1 / 4096.0;
 
 			if (raw_voltage < 1.1)
 				moisture = 10 * raw_voltage - 1;
@@ -233,15 +235,15 @@ PROCESS_THREAD(main_process, ev, data)
 			printf ("Soil Moisture: %u.%u\n", (int)moisture, (int)(moisture * 100) % 100);
 
 //------------------------------MOISTURE Actuators------------------------ //
-			if(moisture < THRESHOLD_MOIS_LOW ){
+			if(value1 < THRESHOLD_MOIS_LOW ){
 				p.type = COMMAND_TYPE_MOIS_LOW;
 				runicast_send(&uc, &addr, MAX_RETRANSMISSIONS);
 			}
-			else if (moisture > THRESHOLD_MOIS_HIGH ){
+			else if (value1 > THRESHOLD_MOIS_HIGH ){
 				p.type = COMMAND_TYPE_MOIS_HIGH;
 				runicast_send(&uc, &addr, MAX_RETRANSMISSIONS);
 			}
-			else if (moisture <=THRESHOLD_MOIS_HIGH   && moisture >= THRESHOLD_MOIS_LOW){
+			else if (value1 <=THRESHOLD_MOIS_HIGH   && value1 >= THRESHOLD_MOIS_LOW){
 				p.type = COMMAND_TYPE_MOIS_OK;
 				runicast_send(&uc, &addr, MAX_RETRANSMISSIONS);
 			}
@@ -252,12 +254,11 @@ PROCESS_THREAD(main_process, ev, data)
 			value3 = sht11_sensor.value(SHT11_SENSOR_TEMP);
 			temp_val= ((0.01 * value3 -32)* .55);
 			double humidity_val= (-4.0 + 405.0*value2/10000);
-			humi_val = (int) humidity_val;
 		    
 			print_values("Light_Sensor_ADC :", value1);
-			print_values("Humidity_ADC :", value2);
-			print_values("Humidity_Value :", humi_val );
-			print_values("Temperature_ADC :", value3);
+			//print_values("Humidity_ADC :", value2);
+			printf("Humidity: %u.%u\n", (int)humidity_val, (int)(100* humidity_val)%100);
+			//print_values("Temperature_ADC :", value3);
 			print_values("Temperature °C :", temp_val);
 
 //------------------------------Light Actuators------------------------ //
@@ -296,16 +297,14 @@ PROCESS_THREAD(main_process, ev, data)
 				p.type = COMMAND_TYPE_HUMID_OK;
 				runicast_send(&uc, &addr, MAX_RETRANSMISSIONS);
 			}
-			
-			
 		}
 		else if (my_id == ID_CO2) {
 
 			adc = ds1000_sensor.value(SENSOR_CO2);
   			raw_voltage = (double)(adc/4096.0)*2.5; 
 			value1 = ((double)(adc/4096.0)*2.5 * 1000) - 200;
-			printf("CO2_ADC: ", adc);
-			printf("CO2_Raw_Voltage :", raw_voltage);  
+		//	printf("CO2_ADC: ", adc);
+		//	printf("CO2_Raw_Voltage :", raw_voltage);  
 			print_values("CO2 ppm:", value1);
 //------------------------------cO2 Actuators------------------------ //
 			if(value1 < THRESHOLD_CO2_LOW ){
@@ -320,7 +319,6 @@ PROCESS_THREAD(main_process, ev, data)
 				p.type = COMMAND_TYPE_CO2_OK;
 				runicast_send(&uc, &addr, MAX_RETRANSMISSIONS);
 			}
-				
 		}
 
 		packetbuf_copyfrom(&p,sizeof(struct my_packet));
@@ -328,8 +326,4 @@ PROCESS_THREAD(main_process, ev, data)
 		runicast_send(&uc, &addr, MAX_RETRANSMISSIONS);	
     }
     PROCESS_END();
-}
-
-void print_values(char * name, uint16_t value){
-	printf("%s %u\n", name, value);
 }
