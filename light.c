@@ -6,11 +6,11 @@ static double temperature;
 
 uint8_t measure_light()
 {
-	static uint16_t raw_light;
+	static uint32_t raw_light;
 	static uint8_t state_light = 0;
-	
-	raw_light = light_sensor.value(LIGHT_SENSOR_TOTAL_SOLAR);
-	printf("Light_Sensor_ADC: %u\n", raw_light);
+
+	raw_light = (uint32_t)light_sensor.value(LIGHT_SENSOR_PHOTOSYNTHETIC);
+	printf("Light/lux: %u\n", (uint16_t)(((3125 * raw_light) >> 9) & 0xFFFF));
 
 
 //------------------------------Light Actuators------------------------ //
@@ -18,7 +18,7 @@ uint8_t measure_light()
 	if(state_light != COMMAND_TYPE_LIGHT_LOW && raw_light < THRESHOLD_LIGHT){
 		return state_light = COMMAND_TYPE_LIGHT_LOW;
 	}
-	else if (state_light != COMMAND_TYPE_LIGHT_OK 
+	else if (state_light != COMMAND_TYPE_LIGHT_OK
 		&& raw_light >= THRESHOLD_LIGHT + OFFSET_LIGHT) {
 		return state_light = COMMAND_TYPE_LIGHT_OK;
 	}
