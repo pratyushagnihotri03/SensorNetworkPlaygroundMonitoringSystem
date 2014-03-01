@@ -1,5 +1,9 @@
 #include "light.h"
 
+/* global temperature value for  *
+ * relative humidity calculation */
+static double temperature;
+
 uint8_t measure_light()
 {
 	static uint16_t raw_light;
@@ -29,7 +33,8 @@ uint8_t measure_humidity()
 	static uint8_t state_humidity = 0;
 
 	raw_humidity = sht11_sensor.value(SHT11_SENSOR_HUMIDITY);
-	humidity_val = -2.0486 + 0.0367 * raw_humidity + -1.5955E-6 * pow(raw_humidity,2);
+	humidity_val = (temperature - 25) * (0.01 + 0.00008 * raw_humidity)
+						- 2.0468 + 0.0367 * raw_humidity - 1.5955E-6 * pow(raw_humidity, 2);
 
 	//print_values("Humidity_ADC :", value2);
 	printf("Humidity: %u.%u\n", (int)humidity_val, (int)(100* humidity_val)%100);
@@ -55,7 +60,6 @@ uint8_t measure_humidity()
 uint8_t measure_temperature()
 {
 	static uint16_t raw_temp;
-	static double temperature;
 	static uint8_t state_temp = 0;
 	static int temp2;
 
