@@ -153,8 +153,6 @@ PROCESS_THREAD(main_process, ev, data)
 	addr.u8[0] = ID_SINK % 256;
 	addr.u8[1] = ID_SINK / 256;
 
-printf("my_id=%u\n", my_id);
-
 	if (my_id == ID_MOIST) {
 		offset = 1;
 		SENSORS_ACTIVATE(vh400);
