@@ -70,7 +70,7 @@ uint8_t measure_temperature()
 	if (temp2 < 0)
 		temp2 *= -1;
 
-	printf("raw = %u Temperature °C: %d.%d\n",raw_temp, (int)temperature, temp2);
+	printf("Temperature °C: %d.%d\n", (int)temperature, temp2);
 
 //------------------------------Temperature Actuators------------------------ //
 	if(state_temp != COMMAND_TYPE_TEMP_LOW
