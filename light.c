@@ -60,7 +60,7 @@ uint8_t measure_temperature()
 	static int temp2;
 
 	raw_temp = sht11_sensor.value(SHT11_SENSOR_TEMP);
-	temperature = 0.01 * raw_temp - 39.8;
+	temperature = 0.01 * raw_temp - 39.6;
 
 	temp2 = (int)(temperature * -100) % 100;
 	if (temp2 < 0)
