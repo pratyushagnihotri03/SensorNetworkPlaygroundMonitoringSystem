@@ -153,6 +153,8 @@ PROCESS_THREAD(main_process, ev, data)
 	addr.u8[0] = ID_SINK % 256;
 	addr.u8[1] = ID_SINK / 256;
 
+printf("my_id=%u\n", my_id);
+
 	if (my_id == ID_MOIST) {
 		offset = 1;
 		SENSORS_ACTIVATE(vh400);
@@ -167,9 +169,11 @@ PROCESS_THREAD(main_process, ev, data)
 		SENSORS_ACTIVATE(ds1000_sensor);
 	}
 
+#ifndef TEST
 	//wait for raspberry pi
 	etimer_set(&et, CLOCK_SECOND * (120 + offset));
 	PROCESS_WAIT_UNTIL(etimer_expired(&et));
+#endif
 
 	if (my_id == ID_SINK) {
 		// start actuators

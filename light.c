@@ -24,12 +24,12 @@ uint8_t measure_light()
 
 uint8_t measure_humidity()
 {
-	static uint8_t raw_humidity;
+	static uint16_t raw_humidity;
 	static double humidity_val;
 	static uint8_t state_humidity = 0;
 
 	raw_humidity = sht11_sensor.value(SHT11_SENSOR_HUMIDITY);
-	humidity_val= (-4.0 + 405.0 * raw_humidity / 10000);
+	humidity_val = -2.0486 + 0.0367 * raw_humidity + -1.5955E-6 * pow(raw_humidity,2);
 
 	//print_values("Humidity_ADC :", value2);
 	printf("Humidity: %u.%u\n", (int)humidity_val, (int)(100* humidity_val)%100);
@@ -54,7 +54,7 @@ uint8_t measure_humidity()
 
 uint8_t measure_temperature()
 {
-	static uint8_t raw_temp;
+	static uint16_t raw_temp;
 	static double temperature;
 	static uint8_t state_temp = 0;
 	static int temp2;
@@ -66,7 +66,7 @@ uint8_t measure_temperature()
 	if (temp2 < 0)
 		temp2 *= -1;
 
-	printf("Temperature °C: %d.%d\n", (int)temperature, temp2);
+	printf("raw = %u Temperature °C: %d.%d\n",raw_temp, (int)temperature, temp2);
 
 //------------------------------Temperature Actuators------------------------ //
 	if(state_temp != COMMAND_TYPE_TEMP_LOW

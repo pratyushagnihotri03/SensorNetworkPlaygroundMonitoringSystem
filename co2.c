@@ -2,7 +2,7 @@
 
 uint8_t measure_co2()
 {
-	static uint8_t raw;
+	static uint16_t raw;
 	static double co2;
 	static uint8_t state_co2 = 0;
 

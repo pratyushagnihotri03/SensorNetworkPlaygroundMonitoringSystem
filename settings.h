@@ -4,6 +4,7 @@
 #define RIGHT //peperomia
 //#define LEFT //kalanchoe
 //#define COOJA
+//#define TEST
 
 /* set node IDs here */
 
@@ -27,6 +28,14 @@
 #define ID_LIGHT 3
 #define ID_CO2 4
 #endif //COOJA
+
+#ifdef TEST
+#define ID_SINK 1
+#define ID_MOIST 2
+#define ID_LIGHT 22998
+#define ID_CO2 3
+#define COOJA
+#endif //TEST
 
 /* set threshold values here */
 #ifdef RIGHT //peperomia
