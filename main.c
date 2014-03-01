@@ -116,8 +116,8 @@ recv_runicast(struct runicast_conn *c, const rimeaddr_t *from, uint8_t seqno)
 static void
 sent_runicast(struct runicast_conn *c, const rimeaddr_t *to, uint8_t retransmissions)
 {
-  printf("runicast message sent to %d.%d, retransmissions %d\n",
-	 to->u8[0], to->u8[1], retransmissions);
+//  printf("runicast message sent to %d.%d, retransmissions %d\n",
+//	 to->u8[0], to->u8[1], retransmissions);
 }
 static void
 timedout_runicast(struct runicast_conn *c, const rimeaddr_t *to, uint8_t retransmissions)
