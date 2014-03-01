@@ -81,7 +81,9 @@ uint8_t measure_temperature()
 		&& temperature > THRESHOLD_TEMP_HIGH ){
 		return state_temp = COMMAND_TYPE_TEMP_HIGH;
 	}
-	else if (temperature <=THRESHOLD_TEMP_HIGH   && temperature >= THRESHOLD_TEMP_LOW ){
+	else if (state_temp != COMMAND_TYPE_TEMP_OK
+		&& temperature <= THRESHOLD_TEMP_HIGH - OFFSET_TEMP
+		&& temperature >= THRESHOLD_TEMP_LOW + OFFSET_TEMP) {
 		return state_temp = COMMAND_TYPE_TEMP_OK;
 	}
 
