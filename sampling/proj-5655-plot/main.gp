@@ -4,6 +4,9 @@ set key out spacing 1.1
 set key box
 set key below width 3
 
+set xdata time
+set timefmt x "%H:%M:%S"
+
 set ytics nomirror # Switch mirroring of primary system OFF 
 set y2tics	# Switch secondary system ON
 
@@ -18,7 +21,7 @@ set style line 4 lt 1 lc rgb "green" lw 4 pt 4
 set style line 5 lt 1 lc rgb "blue" lw 1 pt 5
 set style line 6 lt 1 lc rgb "black" lw 2 pt 6
 
-set size 1.0,0.5
+set size 2.0,1.0
 
 set output "co2.eps"
 

@@ -1,20 +1,24 @@
-SELECT substring( timestamp, 15, 2 ) , substring( text, 27, 6 )
+SELECT substring( timestamp, 11, 2 ) , substring( text, 27, 6 )
 FROM `wsnSAMPLEactuator_5646`
 WHERE text LIKE 'raw%'
 
 
-create table humidity as (SELECT substring( timestamp, 15, 2 ) , substring( text, 27, 6 )
+create table humidity as (SELECT substring( timestamp, 11, 2 ) , substring( text, 27, 6 )
 FROM `wsnSAMPLEactuator_5646`
 WHERE text LIKE 'raw%')
 sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
-create table humidity as (SELECT substring( timestamp, 15, 2 ) , substring( text, 10, 6 ) 
+create table humidity as (SELECT substring( timestamp, 11, 2 ) , substring( text, 10, 6 ) 
 FROM `project_5655` WHERE text LIKE 'Humidity%')
 ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
-create table temperature as (SELECT substring( timestamp, 15, 2 ) , substring( text, 16, 6 ) 
+create table temperature as (SELECT substring( timestamp, 11, 2 ) , substring( text, 16, 6 ) 
 FROM `project_5655` WHERE text LIKE 'Temperature%')
 sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
-create table light as (SELECT substring( timestamp, 15, 2 ) , substring( text, 11, 6 ) 
+create table light as (SELECT substring( timestamp, 11, 2 ) , substring( text, 11, 6 ) 
 FROM `project_5655` WHERE text LIKE 'light/lux%')
 ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
-create table soil as (SELECT substring( timestamp, 15, 2 ) , substring( text, 15, 6 ) 
+create table soil as (SELECT substring( timestamp, 11, 2 ) , substring( text, 15, 6 ) 
 FROM `project_5655` WHERE text LIKE 'soil%')
+ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
+create table co2 as (SELECT substring( timestamp, 11, 2 ) , substring( text, 9, 6 ) 
+FROM `project_5655` WHERE text LIKE 'co2%')
+
