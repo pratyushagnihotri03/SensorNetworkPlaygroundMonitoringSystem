@@ -1,0 +1,8 @@
+SELECT substring( timestamp, 15, 2 ) , substring( text, 27, 6 )
+FROM `wsnSAMPLEactuator_5646`
+WHERE text LIKE 'raw%'
+
+
+create table humidity as (SELECT substring( timestamp, 15, 2 ) , substring( text, 27, 6 )
+FROM `wsnSAMPLEactuator_5646`
+WHERE text LIKE 'raw%')

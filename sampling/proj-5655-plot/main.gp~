@@ -7,9 +7,9 @@ set key below width 3
 set ytics nomirror # Switch mirroring of primary system OFF 
 set y2tics	# Switch secondary system ON
 
-set xlabel "Time [System Ticks]"
+set xlabel "Time [min]"
 set ylabel "Threshold value [ADC]"
-set y2label "Threshold value [units]"
+set y2label "Threshold value [unit]"
 
 set style line 1 lt 1 lc rgb "cyan" lw 2 pt 1
 set style line 2 lt 1 lc rgb "yellow" lw 2 pt 2
@@ -20,9 +20,9 @@ set style line 6 lt 1 lc rgb "black" lw 2 pt 6
 
 set size 1.0,0.5
 
-set output "main.eps"
+set output "soil.eps"
 
-plot "main.dat" using 1:2 axes x1y1 with lines \
+plot "soil.dat" using 1:2 axes x1y1 with lines \
 	 ls 1 title "{/Arial=14 Time}"
    #  ls 1 title "{/Arial=14 Time}",\
    #  "main.dat" using 3:5 axes x1y1 with lines \
