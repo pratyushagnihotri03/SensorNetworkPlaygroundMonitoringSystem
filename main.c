@@ -20,20 +20,20 @@ recv_runicast(struct runicast_conn *c, const rimeaddr_t *from, uint8_t seqno)
     printf("TEMP LOW! received from %d.%d\n",
            from->u8[0], from->u8[1]);
 	//Turning on the HEATER.
-   	 printf("PG:HEAT ON\n");  
+//   	 printf("PG:HEAT ON\n");  
 	 }
   else if(p->type == COMMAND_TYPE_TEMP_OK) {
     printf("TEMP OK! received from %d.%d\n",
            from->u8[0], from->u8[1]); 
 	//Turning off the Fan and Heater.
-   	 printf("PG:FAN OFF\n");
-	 printf("PG:HEAT OFF\n");  
+   //	 printf("PG:FAN OFF\n");
+//	 printf("PG:HEAT OFF\n");  
 	}
   else if(p->type == COMMAND_TYPE_TEMP_HIGH) {
     printf("TEMP HIGH! received from %d.%d\n",
            from->u8[0], from->u8[1]);
 	 //Turning on the Fan.
-   	 printf("PG:FAN ON\n");  
+  // 	 printf("PG:FAN ON\n");  
 	}
 //------------------- CO2---------------------------
   
@@ -41,32 +41,32 @@ recv_runicast(struct runicast_conn *c, const rimeaddr_t *from, uint8_t seqno)
     printf("CO2 HIGH! received from %d.%d\n",
            from->u8[0], from->u8[1]); 
     	//Turning on the Fan.
-   	 printf("PG:FAN ON\n");  
+   //	 printf("PG:FAN ON\n");  
 	}
   else if(p->type == COMMAND_TYPE_CO2_OK) {
     printf("CO2 OK! received from %d.%d\n",
            from->u8[0], from->u8[1]); 
 	//Turning off the Fan.
-   	 printf("PG:FAN OFF\n"); 
+   //	 printf("PG:FAN OFF\n"); 
 	}
   else if(p->type == COMMAND_TYPE_CO2_LOW) {
     printf("CO2 LOW! received from %d.%d\n",
            from->u8[0], from->u8[1]); 
 	//GIVE CO2.
-   	 printf(" ! GIVE CO2 !\n"); 
+   //	 printf(" ! GIVE CO2 !\n"); 
 	}
 //------------------- LIGHT--------------------------- 
   if(p->type == COMMAND_TYPE_LIGHT_LOW) {
     printf("LIGHT LOW! received from %d.%d\n",
            from->u8[0], from->u8[1]); 
  	//Turning on the lamp.
-   	 printf("PG:LIGHT ON\n");
+   //	 printf("PG:LIGHT ON\n");
 	}
   else if(p->type == COMMAND_TYPE_LIGHT_OK) {
     printf("LIGHT OK! received from %d.%d\n",
            from->u8[0], from->u8[1]);
  	//Turning off the lamp.
-   	 printf("PG:LIGHT OFF\n");
+   //	 printf("PG:LIGHT OFF\n");
 	}
 
 //-------------------HUMIDITY---------------------------
@@ -75,20 +75,20 @@ recv_runicast(struct runicast_conn *c, const rimeaddr_t *from, uint8_t seqno)
     printf("HUMIDITY LOW! received from %d.%d\n",
            from->u8[0], from->u8[1]); 
  	//Turning on the Heater.
-   	 printf("PG:HEAT ON\n");
+   //	 printf("PG:HEAT ON\n");
 	}
   else if(p->type == COMMAND_TYPE_HUMID_OK) {
     printf("HUMIDITY OK! received from %d.%d\n",
            from->u8[0], from->u8[1]); 
 	//Turning off the Fan and Heater.
-   	 printf("PG:FAN OFF\n");
-	 printf("PG:HEAT OFF\n");  
+   //	 printf("PG:FAN OFF\n");
+	 //printf("PG:HEAT OFF\n");  
 	}
   else if(p->type == COMMAND_TYPE_HUMID_HIGH) {
     printf("HUMIDITY HIGH! received from %d.%d\n",
            from->u8[0], from->u8[1]);
  	//Turning on the Fan.
-   	 printf("PG:FAN ON\n"); 
+   	// printf("PG:FAN ON\n"); 
        }
 
 //-------------------SOIL MOISTURE-----------------------
@@ -97,27 +97,27 @@ recv_runicast(struct runicast_conn *c, const rimeaddr_t *from, uint8_t seqno)
     printf("MOSITURE LOW! received from %d.%d\n",
            from->u8[0], from->u8[1]); 
  	//Give water to the plant.
-   	 printf("! GIVE WATER !\n");
+   	 //printf("! GIVE WATER !\n");
 	}
   else if(p->type == COMMAND_TYPE_MOIS_OK) {
     printf("MOSITURE OK! received from %d.%d\n",
            from->u8[0], from->u8[1]);
  	//Turning off the heater.
-   	 printf("PG:HEAT OFF\n"); 
+   	 //printf("PG:HEAT OFF\n"); 
 	}
   else if(p->type == COMMAND_TYPE_MOIS_HIGH) {
     printf("MOSITURE HIGH! received from %d.%d\n",
            from->u8[0], from->u8[1]);
  	//Turning on the heater.
-   	 printf("PG:HEAT ON\n");
+   	 //printf("PG:HEAT ON\n");
         }
   
 }
 static void
 sent_runicast(struct runicast_conn *c, const rimeaddr_t *to, uint8_t retransmissions)
 {
-  printf("runicast message sent to %d.%d, retransmissions %d\n",
-	 to->u8[0], to->u8[1], retransmissions);
+//  printf("runicast message sent to %d.%d, retransmissions %d\n",
+//	 to->u8[0], to->u8[1], retransmissions);
 }
 static void
 timedout_runicast(struct runicast_conn *c, const rimeaddr_t *to, uint8_t retransmissions)
@@ -152,8 +152,6 @@ PROCESS_THREAD(main_process, ev, data)
 	my_id = rimeaddr_node_addr.u8[1] * 256 + rimeaddr_node_addr.u8[0];
 	addr.u8[0] = ID_SINK % 256;
 	addr.u8[1] = ID_SINK / 256;
-
-printf("my_id=%u\n", my_id);
 
 	if (my_id == ID_MOIST) {
 		offset = 1;
