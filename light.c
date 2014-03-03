@@ -36,6 +36,10 @@ uint8_t measure_humidity()
 	humidity_val = (temperature - 25) * (0.01 + 0.00008 * raw_humidity)
 						- 2.0468 + 0.0367 * raw_humidity - 1.5955E-6 * pow(raw_humidity, 2);
 
+	//limit humidty to 100%, according to SHT11 data sheet
+	if (humidity_val > 100)
+		humidity_val = 100;
+
 	//print_values("Humidity_ADC :", value2);
 	printf("Humidity: %u.%u\n", (int)humidity_val, (int)(100* humidity_val)%100);
 
