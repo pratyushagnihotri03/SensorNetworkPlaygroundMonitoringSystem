@@ -12,15 +12,15 @@ set ytics nomirror # Switch mirroring of primary system OFF
 set y2tics	# Switch secondary system ON
 
 set xlabel "Time [System Ticks]"
-set ylabel "Threshold value [vwc]"
+set ylabel "Threshold value [ppm]"
 set y2label "Threshold value [units]"
 
 set style line 1 lt 1 lc rgb "cyan" lw 2 pt 1
 
 set size 2.0,1.0
 
-set output "soil_mid_pep.eps"
+set output "co2_mid_pep.eps"
 
-plot "soil_mid_pep.dat" using 1:2 axes x1y1 with impulses ls 1 title "{/Arial=14 Soil Moisture(peperomia)}"
+plot "co2_mid_pep.dat" using 1:2 axes x1y1 with impulses ls 1 title "{/Arial=14 Soil Co2(peperomia)}"
 
      

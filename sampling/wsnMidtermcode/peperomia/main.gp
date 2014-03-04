@@ -21,6 +21,6 @@ set size 2.0,1.0
 
 set output "co2_mid_pep.eps"
 
-plot "co2_mid_pep.dat" using 1:2 axes x1y1 with impulses ls 1 title "{/Arial=14 Soil Co2(peperomia)}"
+plot "co2_mid_pep.dat" using 1:2 axes x1y1 with impulses ls 1 title "{/Arial=14 Co2(peperomia)}"
 
      
