@@ -9,14 +9,14 @@
 /* set node IDs here */
 
 #ifdef RIGHT //peperomia
-#define ID_SINK 3008
+#define ID_SINK 3001
 #define ID_MOIST 3003
 #define ID_LIGHT 3009
 #define ID_CO2 3002
 #endif //RIGHT
 
 #ifdef LEFT //kalanchoe
-#define ID_SINK 3001
+#define ID_SINK 3008
 #define ID_MOIST 3007
 #define ID_LIGHT 3009
 #define ID_CO2 3002
