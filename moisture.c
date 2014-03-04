@@ -6,7 +6,7 @@ uint8_t measure_moisture()
 	static double voltage, moisture;
 	static uint8_t state = 0;
 
-	raw = vh400.value(ADC0);
+	raw = vh400.value(ADC3);
 	voltage = 3 * raw / 4096.0;
 
 	if (voltage < 1.1)
