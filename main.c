@@ -166,7 +166,7 @@ PROCESS_THREAD(main_process, ev, data)
 
 #ifndef TEST
 	//wait for raspberry pi
-	etimer_set(&et, CLOCK_SECOND * (120 + offset));
+	etimer_set(&et, CLOCK_SECOND * (120 * offset));
 	PROCESS_WAIT_UNTIL(etimer_expired(&et));
 #endif
 
