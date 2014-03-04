@@ -140,7 +140,7 @@ PROCESS_THREAD(main_process, ev, data)
 	static struct my_packet p;
 	static rimeaddr_t addr;
 	static uint8_t cmd = 0;
-	static int offset;
+	static int offset = 0;
 
 	PROCESS_EXITHANDLER(runicast_close(&uc);)
 	PROCESS_BEGIN();
