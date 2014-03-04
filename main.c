@@ -138,7 +138,7 @@ static uint16_t my_id;
 PROCESS_THREAD(main_process, ev, data)
 {
 	static struct my_packet p;
-	static rimeaddr_t addr;
+	static rimeaddr_t addr[2];
 	static uint8_t cmd = 0;
 	static int offset = 0;
 
@@ -147,10 +147,12 @@ PROCESS_THREAD(main_process, ev, data)
 	runicast_open(&uc, 140, &runicast_callbacks);
 
 	my_id = rimeaddr_node_addr.u8[1] * 256 + rimeaddr_node_addr.u8[0];
-	addr.u8[0] = ID_SINK % 256;
-	addr.u8[1] = ID_SINK / 256;
+	addr[RIGHT].u8[0] = ID_SINK_R % 256;
+	addr[RIGHT].u8[1] = ID_SINK_R / 256;
+	addr[LEFT].u8[0] = ID_SINK_L % 256;
+	addr[LEFT].u8[1] = ID_SINK_L / 256;
 
-	if (my_id == ID_MOIST) {
+	if (my_id == ID_MOIST_R || my_id == ID_MOIST_L) {
 		offset = 1;
 		SENSORS_ACTIVATE(vh400);
 	}
@@ -170,7 +172,7 @@ PROCESS_THREAD(main_process, ev, data)
 	PROCESS_WAIT_UNTIL(etimer_expired(&et));
 #endif
 
-	if (my_id == ID_SINK) {
+	if (my_id == ID_SINK_R || my_id == ID_SINK_L) {
 		// start actuators
 		printf("PG:START\n");
 
@@ -187,12 +189,20 @@ PROCESS_THREAD(main_process, ev, data)
 		etimer_set(&et, CLOCK_SECOND * MEASURING_PERIOD);
 		PROCESS_WAIT_UNTIL(etimer_expired(&et));
 
-		if (my_id == ID_MOIST) {
+		if (my_id == ID_MOIST_R) {
 			cmd = measure_moisture();
 			if (cmd != 0) {
 				p.type = cmd;
 				packetbuf_copyfrom(&p,sizeof(struct my_packet));
-				runicast_send(&uc, &addr, MAX_RETRANSMISSIONS);
+				runicast_send(&uc, &addr[RIGHT], MAX_RETRANSMISSIONS);
+			}
+		}
+		if (my_id == ID_MOIST_L) {
+			cmd = measure_moisture();
+			if (cmd != 0) {
+				p.type = cmd;
+				packetbuf_copyfrom(&p,sizeof(struct my_packet));
+				runicast_send(&uc, &addr[LEFT], MAX_RETRANSMISSIONS);
 			}
 		}
 		else if (my_id == ID_LIGHT) {  //internal sensors node
@@ -200,7 +210,7 @@ PROCESS_THREAD(main_process, ev, data)
 			if (cmd != 0) {
 				p.type = cmd;
 				packetbuf_copyfrom(&p,sizeof(struct my_packet));
-				runicast_send(&uc, &addr, MAX_RETRANSMISSIONS);
+				runicast_send(&uc, &addr[LEFT], MAX_RETRANSMISSIONS);
 			}
 
 			cmd = measure_temperature();
