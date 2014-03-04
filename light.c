@@ -8,9 +8,11 @@ uint8_t measure_light()
 {
 	static uint32_t raw_light;
 	static uint8_t state_light = COMMAND_TYPE_LIGHT_OK;
+	static uint16_t light;
 
 	raw_light = (uint32_t)light_sensor.value(LIGHT_SENSOR_PHOTOSYNTHETIC);
-	printf("raw %u Light/lux: %u\n", (uint16_t)raw_light, (uint16_t)(((3125 * raw_light) >> 9) & 0xFFFF));
+	light = (uint16_t)(((3125 * raw_light) >> 9) & 0xFFFF);
+	printf("raw %u Light/lux: %u\n", light);
 
 
 //------------------------------Light Actuators------------------------ //
