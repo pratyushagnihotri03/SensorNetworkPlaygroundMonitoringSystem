@@ -1,0 +1,26 @@
+sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
+create table humidity_mid_pep as (SELECT substring( timestamp, 11, 9 ) , substring( text, 10, 6 ) 
+FROM `WsnMidTermCode_5705` WHERE text LIKE 'Humidity%')
+ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
+
+create table temperature_mid_pep as (SELECT substring( timestamp, 11, 9 ) , substring( text, 16, 6 ) 
+FROM `WsnMidTermCode_5705` WHERE text LIKE 'Temperature%')
+
+sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
+
+create table light_mid_pep as (SELECT substring( timestamp, 11, 9 ) , substring( text, 11, 6 ) 
+
+FROM `WsnMidTermCode_5705` WHERE text LIKE 'light/lux%')
+
+ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
+
+create table soil_mid_pep as (SELECT substring( timestamp, 11, 9 ) , substring( text, 15, 6 ) 
+
+FROM `WsnMidTermCode_5705` WHERE text LIKE 'soil%')
+
+ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
+
+
+create table co2_mid_pep as (SELECT substring( timestamp, 11, 9 ) , substring( text, 9, 6 ) 
+
+FROM `WsnMidTermCode_5705` WHERE text LIKE 'co2 ppm%')
