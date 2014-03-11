@@ -166,7 +166,7 @@ PROCESS_THREAD(main_process, ev, data)
 
 #ifndef TEST
 	//wait for raspberry pi
-	etimer_set(&et, CLOCK_SECOND * (120 + offset));
+	etimer_set(&et, CLOCK_SECOND * (120 + 10 * offset));
 	PROCESS_WAIT_UNTIL(etimer_expired(&et));
 #endif
 
@@ -187,8 +187,14 @@ PROCESS_THREAD(main_process, ev, data)
 		etimer_set(&et, CLOCK_SECOND * MEASURING_PERIOD);
 		PROCESS_WAIT_UNTIL(etimer_expired(&et));
 
-		if (my_id == ID_MOIST)
+		if (my_id == ID_MOIST) {
 			cmd = measure_moisture();
+			if (cmd != 0) {
+				p.type = cmd;
+				packetbuf_copyfrom(&p,sizeof(struct my_packet));
+				runicast_send(&uc, &addr, MAX_RETRANSMISSIONS);
+			}
+		}
 		else if (my_id == ID_LIGHT) {  //internal sensors node
 			cmd = measure_light(); 
 			if (cmd != 0) {
@@ -211,14 +217,15 @@ PROCESS_THREAD(main_process, ev, data)
 				runicast_send(&uc, &addr, MAX_RETRANSMISSIONS);
 			}
 		}
-		else if (my_id == ID_CO2)
+		else if (my_id == ID_CO2) {
 			cmd = measure_co2();
-
-		if (cmd != 0) {
-			p.type = cmd;
-			packetbuf_copyfrom(&p,sizeof(struct my_packet));
-			runicast_send(&uc, &addr, MAX_RETRANSMISSIONS);
+			if (cmd != 0) {
+				p.type = cmd;
+				packetbuf_copyfrom(&p,sizeof(struct my_packet));
+				runicast_send(&uc, &addr, MAX_RETRANSMISSIONS);
+			}
 		}
+		
 	}
 	PROCESS_END();
 }

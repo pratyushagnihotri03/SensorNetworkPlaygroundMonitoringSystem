@@ -7,10 +7,12 @@ static double temperature;
 uint8_t measure_light()
 {
 	static uint32_t raw_light;
-	static uint8_t state_light = 0;
+	static uint8_t state_light = COMMAND_TYPE_LIGHT_OK;
+	static uint16_t light;
 
 	raw_light = (uint32_t)light_sensor.value(LIGHT_SENSOR_PHOTOSYNTHETIC);
-	printf("raw %u Light/lux: %u\n", (uint16_t)raw_light, (uint16_t)(((3125 * raw_light) >> 9) & 0xFFFF));
+	light = (uint16_t)(((3125 * raw_light) >> 9) & 0xFFFF);
+	printf("Light/lux: %u\n", light);
 
 
 //------------------------------Light Actuators------------------------ //
@@ -30,7 +32,7 @@ uint8_t measure_humidity()
 {
 	static uint16_t raw_humidity;
 	static double humidity_val;
-	static uint8_t state_humidity = 0;
+	static uint8_t state_humidity = COMMAND_TYPE_HUMID_OK;
 
 	raw_humidity = sht11_sensor.value(SHT11_SENSOR_HUMIDITY);
 	humidity_val = (temperature - 25) * (0.01 + 0.00008 * raw_humidity)
@@ -64,7 +66,7 @@ uint8_t measure_humidity()
 uint8_t measure_temperature()
 {
 	static uint16_t raw_temp;
-	static uint8_t state_temp = 0;
+	static uint8_t state_temp = COMMAND_TYPE_TEMP_OK;
 	static int temp2;
 
 	raw_temp = sht11_sensor.value(SHT11_SENSOR_TEMP);
