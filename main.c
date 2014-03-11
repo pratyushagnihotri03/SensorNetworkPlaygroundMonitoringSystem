@@ -2,7 +2,6 @@
 #include "contiki.h"
 #include "rimeaddr.h"
 #include "net/rime.h"
-#include "sink.h"
 #include "moisture.h"
 #include "light.h"
 #include "co2.h"
@@ -20,14 +19,13 @@ recv_runicast(struct runicast_conn *c, const rimeaddr_t *from, uint8_t seqno)
     printf("TEMP LOW! received from %d.%d\n",
            from->u8[0], from->u8[1]);
 	//Turning on the HEATER.
-//   	 printf("PG:HEAT ON\n");  
+   	 printf("PG:HEAT ON\n");  
 	 }
   else if(p->type == COMMAND_TYPE_TEMP_OK) {
     printf("TEMP OK! received from %d.%d\n",
            from->u8[0], from->u8[1]); 
-	//Turning off the Fan and Heater.
-   //	 printf("PG:FAN OFF\n");
-//	 printf("PG:HEAT OFF\n");  
+	//Turning off the Heater.
+	 printf("PG:HEAT OFF\n");  
 	}
   else if(p->type == COMMAND_TYPE_TEMP_HIGH) {
     printf("TEMP HIGH! received from %d.%d\n",
@@ -41,13 +39,13 @@ recv_runicast(struct runicast_conn *c, const rimeaddr_t *from, uint8_t seqno)
     printf("CO2 HIGH! received from %d.%d\n",
            from->u8[0], from->u8[1]); 
     	//Turning on the Fan.
-   //	 printf("PG:FAN ON\n");  
+   	 printf("PG:FAN ON\n");  
 	}
   else if(p->type == COMMAND_TYPE_CO2_OK) {
     printf("CO2 OK! received from %d.%d\n",
            from->u8[0], from->u8[1]); 
 	//Turning off the Fan.
-   //	 printf("PG:FAN OFF\n"); 
+   	 printf("PG:FAN OFF\n"); 
 	}
   else if(p->type == COMMAND_TYPE_CO2_LOW) {
     printf("CO2 LOW! received from %d.%d\n",
@@ -60,13 +58,13 @@ recv_runicast(struct runicast_conn *c, const rimeaddr_t *from, uint8_t seqno)
     printf("LIGHT LOW! received from %d.%d\n",
            from->u8[0], from->u8[1]); 
  	//Turning on the lamp.
-   //	 printf("PG:LIGHT ON\n");
+   	 printf("PG:LIGHT ON\n");
 	}
   else if(p->type == COMMAND_TYPE_LIGHT_OK) {
     printf("LIGHT OK! received from %d.%d\n",
            from->u8[0], from->u8[1]);
  	//Turning off the lamp.
-   //	 printf("PG:LIGHT OFF\n");
+   	 printf("PG:LIGHT OFF\n");
 	}
 
 //-------------------HUMIDITY---------------------------
@@ -80,15 +78,14 @@ recv_runicast(struct runicast_conn *c, const rimeaddr_t *from, uint8_t seqno)
   else if(p->type == COMMAND_TYPE_HUMID_OK) {
     printf("HUMIDITY OK! received from %d.%d\n",
            from->u8[0], from->u8[1]); 
-	//Turning off the Fan and Heater.
-   //	 printf("PG:FAN OFF\n");
-	 //printf("PG:HEAT OFF\n");  
+	//Turning off the Fan.
+   	 printf("PG:FAN OFF\n");
 	}
   else if(p->type == COMMAND_TYPE_HUMID_HIGH) {
     printf("HUMIDITY HIGH! received from %d.%d\n",
            from->u8[0], from->u8[1]);
  	//Turning on the Fan.
-   	// printf("PG:FAN ON\n"); 
+   	 printf("PG:FAN ON\n"); 
        }
 
 //-------------------SOIL MOISTURE-----------------------
@@ -177,14 +174,13 @@ PROCESS_THREAD(main_process, ev, data)
 		// start actuators
 		printf("PG:START\n");
 
-		// add something smart here
+		// smart things are done in recv callback function
 		while(1) {
 			PROCESS_YIELD();
 		}
 
-		// stop actuators
+		// never stop actuators??!?
 		printf("PG:ENG\n");
-		//sink();
 	}
 
 	while(1) {

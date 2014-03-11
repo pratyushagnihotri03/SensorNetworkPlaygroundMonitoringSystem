@@ -5,7 +5,7 @@ endif
 CONTIKI_PROJECT = main
 all: $(CONTIKI_PROJECT)
 
-CONTIKI_SOURCEFILES += vh400.c ds1000-sensor.c moisture.c sink.c light.c co2.c
+CONTIKI_SOURCEFILES += vh400.c ds1000-sensor.c moisture.c light.c co2.c
 
 #CONTIKI = your-path-to-contiki
 ifndef CONTIKI
