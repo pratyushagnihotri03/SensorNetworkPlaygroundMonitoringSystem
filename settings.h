@@ -17,7 +17,7 @@
 #define ID_CO2 3002
 
 
-/* set threshold values here */
+/* set threshold values here for {LEFT, RIGHT} plant*/
 const double THRESHOLD_CO2_HIGH[] = { 950, 950 };
 const double THRESHOLD_CO2_LOW[] = { 40, 40 };
 const uint32_t THRESHOLD_LIGHT[] = { 680, 1200 };
