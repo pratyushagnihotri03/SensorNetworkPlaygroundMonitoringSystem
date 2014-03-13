@@ -4,7 +4,7 @@ uint8_t measure_moisture(static uint16_t my_id)
 {
 	static uint16_t raw;
 	static double voltage, moisture;
-	static uint8_t state = COMMAND_TYPE_MOIS_OK;
+	static uint8_t state[2];
 	static uint8_t plant;
 
 	raw = vh400.value(ADC3);
@@ -30,17 +30,24 @@ uint8_t measure_moisture(static uint16_t my_id)
 
 	printf ("Soil Moisture: %u.%u\n", (int)moisture, (int)(moisture * 100) % 100);
 
+	state [1-plant] = 0;
+
 //------------------------------MOISTURE Actuators------------------------ //
-	if(state != COMMAND_TYPE_MOIS_LOW && raw < THRESHOLD_MOIS_LOW[plant]) {
-		return state = COMMAND_TYPE_MOIS_LOW;
+	if(state[plant] != COMMAND_TYPE_MOIS_LOW && raw < THRESHOLD_MOIS_LOW[plant]) {
+		state[plant] = COMMAND_TYPE_MOIS_LOW;
+		return state;
 	}
-	else if (state != COMMAND_TYPE_MOIS_HIGH && raw > THRESHOLD_MOIS_HIGH[plant]) {
-		return state = COMMAND_TYPE_MOIS_HIGH;
+	else if (state[plant] != COMMAND_TYPE_MOIS_HIGH && raw > THRESHOLD_MOIS_HIGH[plant]) {
+		state[plant] = COMMAND_TYPE_MOIS_HIGH;
+		return state;
 	}
-	else if (state != COMMAND_TYPE_MOIS_OK
+	else if (state[plant] != COMMAND_TYPE_MOIS_OK
 			&& raw <= THRESHOLD_MOIS_HIGH[plant] - OFFSET_MOIST
 			&& raw >= THRESHOLD_MOIS_LOW[plant] + OFFSET_MOIST){
-		return state = COMMAND_TYPE_MOIS_OK;
+		state[plant] = COMMAND_TYPE_MOIS_OK;
+		return state;
 	}
-	return 0;
+
+	state[plant] = 0;
+	return state;
 }
