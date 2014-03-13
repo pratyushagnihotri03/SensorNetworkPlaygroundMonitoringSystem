@@ -18,7 +18,7 @@ void measure_co2(uint8_t cmd[2])
 
 		if(state_co2[i] != CO2_LOW && co2 < THRESHOLD_CO2_LOW[i] ){
 			state_co2[i] = 0;
-			printf("%s C02 low\n");
+			printf("%s C02 low\n", plant_name[i]);
 			continue;
 		}
 		else if (state_co2[i] != CO2_HIGH && co2 > THRESHOLD_CO2_HIGH[i] ){
