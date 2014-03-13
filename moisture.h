@@ -7,6 +7,6 @@
 #include "dev/sky-sensors.h"
 #include "vh400.h"
 
-uint8_t measure_moisture(static uint16_t my_id);
+void measure_moisture(uint8_t state[2], uint16_t my_id);
 
 #endif //__MOISTURE_H__

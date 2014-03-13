@@ -190,7 +190,7 @@ PROCESS_THREAD(main_process, ev, data)
 		PROCESS_WAIT_UNTIL(etimer_expired(&et));
 
 		if (my_id == ID_MOIST_R) {
-			cmd = measure_moisture(my_id);
+			measure_moisture(cmd, my_id);
 			if (cmd[RIGHT] != 0) {
 				p.type = cmd[RIGHT];
 				packetbuf_copyfrom(&p,sizeof(struct my_packet));
@@ -198,7 +198,7 @@ PROCESS_THREAD(main_process, ev, data)
 			}
 		}
 		if (my_id == ID_MOIST_L) {
-			cmd = measure_moisture(my_id);
+			measure_moisture(cmd, my_id);
 			if (cmd[LEFT] != 0) {
 				p.type = cmd[LEFT];
 				packetbuf_copyfrom(&p,sizeof(struct my_packet));
@@ -206,7 +206,7 @@ PROCESS_THREAD(main_process, ev, data)
 			}
 		}
 		else if (my_id == ID_LIGHT) {  //internal sensors node
-			cmd = measure_light(); 
+			measure_light(cmd); 
 			for (i = 0; i < 2; i++) {
 				if (cmd[i] != 0) {
 					p.type = cmd[i];
@@ -215,7 +215,7 @@ PROCESS_THREAD(main_process, ev, data)
 				}
 			}
 
-			cmd = measure_temperature();
+			measure_temperature(cmd);
 			for (i = 0; i < 2; i++) {
 				if (cmd[i] != 0) {
 					p.type = cmd[i];
@@ -224,7 +224,7 @@ PROCESS_THREAD(main_process, ev, data)
 				}
 			}
 
-			cmd = measure_humidity();
+			measure_humidity(cmd);
 			for (i = 0; i < 2; i++) {
 				if (cmd[i] != 0) {
 					p.type = cmd[i];
@@ -234,7 +234,7 @@ PROCESS_THREAD(main_process, ev, data)
 			}
 		}
 		else if (my_id == ID_CO2) {
-			cmd = measure_co2();
+			measure_co2(cmd);
 			for (i = 0; i < 2; i++) {
 				if (cmd[i] != 0) {
 					p.type = cmd[i];

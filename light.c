@@ -4,10 +4,10 @@
  * relative humidity calculation */
 static double temperature = 20.0;
 
-uint8_t measure_light()
+void measure_light(uint8_t state_light[2])
 {
 	static uint32_t raw_light;
-	static uint8_t state_light[2] = {0,0}, i;
+	static uint8_t i;
 	static uint16_t light;
 
 	raw_light = (uint32_t)light_sensor.value(LIGHT_SENSOR_PHOTOSYNTHETIC);
@@ -18,6 +18,8 @@ uint8_t measure_light()
 //------------------------------Light Actuators------------------------ //
 
 	for (i = 0; i < 2; i++) {
+		state_light[i] = 0;
+
 		if(state_light[i] != COMMAND_TYPE_LIGHT_LOW && raw_light < THRESHOLD_LIGHT[i]){
 			state_light[i] = COMMAND_TYPE_LIGHT_LOW;
 			continue;
@@ -29,14 +31,14 @@ uint8_t measure_light()
 		}
 	}
 
-	return state;
+	return;
 }
 
-uint8_t measure_humidity()
+void measure_humidity(uint8_t state_humidity[2])
 {
 	static uint16_t raw_humidity;
 	static double humidity_val;
-	static uint8_t state_humidity[2] = {0,0}, i;
+	static uint8_t i;
 
 	raw_humidity = sht11_sensor.value(SHT11_SENSOR_HUMIDITY);
 	humidity_val = (temperature - 25) * (0.01 + 0.00008 * raw_humidity)
@@ -52,6 +54,8 @@ uint8_t measure_humidity()
 //------------------------------HUMIDITY Actuators------------------------ //
 
 	for (i = 0; i < 2; i++) {
+		state_humidity[i] = 0;
+
 		if(state_humidity[i] != COMMAND_TYPE_HUMID_LOW 
 			&& raw_humidity < THRESHOLD_HUMID_LOW[i]) {
 			state_humidity[i] = COMMAND_TYPE_HUMID_LOW;
@@ -70,13 +74,13 @@ uint8_t measure_humidity()
 		}
 	}
 
-	return state;
+	return;
 }
 
-uint8_t measure_temperature()
+void measure_temperature(uint8_t state_temp[2])
 {
 	static uint16_t raw_temp;
-	static uint8_t state_temp[2] = {0,0}, i;
+	static uint8_t i;
 	static int temp2;
 
 	raw_temp = sht11_sensor.value(SHT11_SENSOR_TEMP);
@@ -91,6 +95,8 @@ uint8_t measure_temperature()
 //------------------------------Temperature Actuators------------------------ //
 
 	for (i = 0; i < 2; i++) {
+		state_temp[i] = 0;
+
 		if(state_temp[i] != COMMAND_TYPE_TEMP_LOW
 			&& temperature < THRESHOLD_TEMP_LOW[i] ){
 			state_temp[i] = COMMAND_TYPE_TEMP_LOW;
@@ -109,5 +115,5 @@ uint8_t measure_temperature()
 		}
 	}
 
-	return state;
+	return;
 }
