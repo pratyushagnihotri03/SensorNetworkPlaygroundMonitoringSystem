@@ -16,14 +16,17 @@ uint8_t measure_co2()
 	for (i = 0; i < 2; i++) {
 		if(state_co2[i] != COMMAND_TYPE_CO2_LOW && co2 < THRESHOLD_CO2_LOW[i] ){
 			state_co2[i] = COMMAND_TYPE_CO2_LOW;
+			continue;
 		}
 		else if (state_co2[i] != COMMAND_TYPE_CO2_HIGH && co2 > THRESHOLD_CO2_HIGH[i] ){
 			state_co2[i] = COMMAND_TYPE_CO2_HIGH;
+			continue;
 		}
 		else if (state_co2[i] != COMMAND_TYPE_CO2_OK 
 			&& co2 <=THRESHOLD_CO2_HIGH[i] - OFFSET_CO2 
 			&& co2 >= THRESHOLD_CO2_LOW[i] + OFFSET_CO2){
 			state_co2[i] = COMMAND_TYPE_CO2_OK;
+			continue;
 		}
 	}
 

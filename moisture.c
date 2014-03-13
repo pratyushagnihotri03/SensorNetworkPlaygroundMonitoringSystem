@@ -4,7 +4,7 @@ uint8_t measure_moisture(static uint16_t my_id)
 {
 	static uint16_t raw;
 	static double voltage, moisture;
-	static uint8_t state[2];
+	static uint8_t state[2] = {0,0};
 	static uint8_t plant;
 
 	raw = vh400.value(ADC3);
@@ -48,6 +48,5 @@ uint8_t measure_moisture(static uint16_t my_id)
 		return state;
 	}
 
-	state[plant] = 0;
 	return state;
 }
