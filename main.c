@@ -8,6 +8,16 @@
 
 #define MAX_RETRANSMISSIONS 4
 
+const double THRESHOLD_CO2_HIGH[] = { 950, 950 };
+const double THRESHOLD_CO2_LOW[] = { 40, 40 };
+const uint32_t THRESHOLD_LIGHT[] = { 680, 1200 };
+const double THRESHOLD_TEMP_HIGH[] = { 28, 29 };
+const double THRESHOLD_TEMP_LOW[] = { 24, 12.7 };
+const uint16_t THRESHOLD_MOIS_LOW[] = { 1774, 1502 };
+const uint16_t THRESHOLD_MOIS_HIGH[] = { 2428, 1917 };
+const uint16_t THRESHOLD_HUMID_LOW[] = { 20, 20 };
+const uint16_t THRESHOLD_HUMID_HIGH[] = { 40, 40 };
+
 /* Unicast Receive Function */
 static void
 recv_runicast(struct runicast_conn *c, const rimeaddr_t *from, uint8_t seqno)
