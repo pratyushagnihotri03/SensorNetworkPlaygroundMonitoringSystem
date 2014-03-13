@@ -18,7 +18,6 @@
 
 
 /* set threshold values here */
-//RIGHT = peperomia
 const double THRESHOLD_CO2_HIGH[] = { 950, 950 };
 const double THRESHOLD_CO2_LOW[] = { 40, 40 };
 const uint32_t THRESHOLD_LIGHT[] = { 680, 1200 };
