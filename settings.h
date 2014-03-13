@@ -28,7 +28,7 @@ extern const uint16_t THRESHOLD_MOIS_HIGH[];
 extern const uint16_t THRESHOLD_HUMID_LOW[];
 extern const uint16_t THRESHOLD_HUMID_HIGH[];
 
-extern const char ** plant_name;
+extern const char * plant_name[];
 
 //offset values for debouncing
 #define OFFSET_MOIST 100

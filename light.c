@@ -62,7 +62,7 @@ void measure_humidity(uint8_t cmd[2])
 
 		if(state_humidity[i] != HUMID_LOW 
 			&& raw_humidity < THRESHOLD_HUMID_LOW[i]) {
-			state_humidity[i] = HUMI_LOW;
+			state_humidity[i] = HUMID_LOW;
 			printf("%s Humidity low\n", plant_name[i]);
 			continue;
 		}
@@ -108,7 +108,7 @@ void measure_temperature(uint8_t cmd[2])
 		if(state_temp[i] != TEMP_LOW
 			&& temperature < THRESHOLD_TEMP_LOW[i] ){
 			state_temp[i] = TEMP_LOW;
-			cmd[i] = TEMP_LOW
+			cmd[i] = TEMP_LOW;
 			continue;
 		}
 		else if (state_temp[i] != TEMP_HIGH
@@ -121,7 +121,7 @@ void measure_temperature(uint8_t cmd[2])
 			&& temperature <= THRESHOLD_TEMP_HIGH[i] - OFFSET_TEMP
 			&& temperature >= THRESHOLD_TEMP_LOW[i] + OFFSET_TEMP) {
 			state_temp[i] = TEMP_OK;
-			cmd[i] = TEMP_OK
+			cmd[i] = TEMP_OK;
 			continue;
 		}
 	}
