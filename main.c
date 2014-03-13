@@ -18,6 +18,7 @@ const uint16_t THRESHOLD_MOIS_LOW[] = { 1774, 1502 };
 const uint16_t THRESHOLD_MOIS_HIGH[] = { 2428, 1917 };
 const uint16_t THRESHOLD_HUMID_LOW[] = { 20, 20 };
 const uint16_t THRESHOLD_HUMID_HIGH[] = { 40, 40 };
+const char ** plant_name = {"Peperomia", "Kalanchoe"};
 
 /* Unicast Receive Function */
 static void
