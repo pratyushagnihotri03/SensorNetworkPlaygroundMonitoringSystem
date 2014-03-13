@@ -2,7 +2,7 @@
 
 /* global temperature value for  *
  * relative humidity calculation */
-static double temperature;
+static double temperature = 20.0;
 
 uint8_t measure_light()
 {
