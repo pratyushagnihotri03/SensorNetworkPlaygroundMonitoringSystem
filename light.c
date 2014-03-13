@@ -4,7 +4,7 @@
  * relative humidity calculation */
 static double temperature = 20.0;
 
-void measure_light(uint8_t state_light[2])
+void measure_light(uint8_t cmd[2])
 {
 	static uint32_t raw_light;
 	static uint8_t i;
@@ -35,7 +35,7 @@ void measure_light(uint8_t state_light[2])
 	return;
 }
 
-void measure_humidity(uint8_t state_humidity[2])
+void measure_humidity(uint8_t cmd[2])
 {
 	static uint16_t raw_humidity;
 	static double humidity_val;
@@ -79,7 +79,7 @@ void measure_humidity(uint8_t state_humidity[2])
 	return;
 }
 
-void measure_temperature(uint8_t state_temp[2])
+void measure_temperature(uint8_t cmd[2])
 {
 	static uint16_t raw_temp;
 	static uint8_t i;

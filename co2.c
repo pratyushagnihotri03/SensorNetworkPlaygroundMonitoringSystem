@@ -1,6 +1,6 @@
 #include "co2.h"
 
-void measure_co2(uint8_t state_co2[2])
+void measure_co2(uint8_t cmd[2])
 {
 	static uint16_t raw;
 	static double co2;
