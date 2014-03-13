@@ -177,11 +177,11 @@ PROCESS_THREAD(main_process, ev, data)
 		SENSORS_ACTIVATE(ds1000_sensor);
 	}
 
-#ifndef TEST
+
 	//wait for raspberry pi
 	etimer_set(&et, CLOCK_SECOND * (120 + 10 * offset));
 	PROCESS_WAIT_UNTIL(etimer_expired(&et));
-#endif
+
 
 	if (my_id == ID_SINK_R || my_id == ID_SINK_L) {
 		// start actuators
