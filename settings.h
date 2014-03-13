@@ -17,7 +17,7 @@
 #define ID_CO2 3002
 
 
-/* set threshold values here for {LEFT, RIGHT} plant*/
+/* set threshold values for {LEFT, RIGHT} plant in main.c */
 extern const double THRESHOLD_CO2_HIGH[];
 extern const double THRESHOLD_CO2_LOW[];
 extern const uint32_t THRESHOLD_LIGHT[];
