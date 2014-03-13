@@ -5,7 +5,8 @@ void measure_co2(uint8_t cmd[2])
 	static uint16_t raw;
 	static double co2;
 	static uint8_t i;
-	static state_co2[2];
+	static uint8_t state_co2[2];
+
 	raw = ds1000_sensor.value(SENSOR_CO2);
 	co2 = ((double)(raw/4096.0)*2.5 * 1000) - 200;
 //	printf("CO2_ADC: ", adc);

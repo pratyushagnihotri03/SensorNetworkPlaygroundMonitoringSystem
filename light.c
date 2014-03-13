@@ -42,7 +42,7 @@ void measure_humidity(uint8_t cmd[2])
 	static uint16_t raw_humidity;
 	static double humidity_val;
 	static uint8_t i;
-        uint8_t state_humidity[2];
+        static uint8_t state_humidity[2];
 
 	raw_humidity = sht11_sensor.value(SHT11_SENSOR_HUMIDITY);
 	humidity_val = (temperature - 25) * (0.01 + 0.00008 * raw_humidity)
@@ -89,7 +89,7 @@ void measure_temperature(uint8_t cmd[2])
 	static uint16_t raw_temp;
 	static uint8_t i;
 	static int temp2;
-	uint8_t state_temp[2];
+	static uint8_t state_temp[2];
 
 	raw_temp = sht11_sensor.value(SHT11_SENSOR_TEMP);
 	temperature = 0.01 * raw_temp - 39.6;
