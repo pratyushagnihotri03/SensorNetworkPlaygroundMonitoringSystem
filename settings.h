@@ -39,6 +39,17 @@
 
 /* set threshold values here */
 //RIGHT = peperomia
+const char THRESHOLD_CO2_HIGH[] = { 950, 950 };
+const char THRESHOLD_CO2_LOW[] = { 40, 40 };
+const char THRESHOLD_LIGHT[] = { 680, 1200 };
+const char THRESHOLD_TEMP_HIGH[] = { 28, 29 };
+const char THRESHOLD_TEMP_LOW[] = { 24, 12.7 };
+const char THRESHOLD_MOIS_LOW[] = { 1774, 1502 };
+const char THRESHOLD_MOIS_HIGH[] = { 2428, 1917 };
+const char THRESHOLD_HUMID_LOW[] = { 20, 20 };
+const char THRESHOLD_HUMID_HIGH[] = { 40, 40 };
+
+/*
 #define THRESHOLD_CO2_HIGH_R 950
 #define THRESHOLD_CO2_LOW_R 40
 #define THRESHOLD_LIGHT_R 680
@@ -59,6 +70,7 @@
 #define THRESHOLD_MOIS_HIGH_R 1917
 #define THRESHOLD_HUMID_LOW_R 20
 #define THRESHOLD_HUMID_HIGH_R 40
+*/
 
 //offset values for debouncing
 #define OFFSET_MOIST 100
