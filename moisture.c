@@ -1,6 +1,6 @@
 #include "moisture.h"
 
-uint8_t measure_moisture() 
+uint8_t measure_moisture()
 {
 	static uint16_t raw;
 	static double voltage, moisture;

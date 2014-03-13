@@ -139,7 +139,7 @@ PROCESS_THREAD(main_process, ev, data)
 {
 	static struct my_packet p;
 	static rimeaddr_t addr[2];
-	static uint8_t cmd = 0;
+	static uint8_t cmd[2] = {0,0};
 	static int offset = 0;
 
 	PROCESS_EXITHANDLER(runicast_close(&uc);)
@@ -191,48 +191,56 @@ PROCESS_THREAD(main_process, ev, data)
 
 		if (my_id == ID_MOIST_R) {
 			cmd = measure_moisture();
-			if (cmd != 0) {
-				p.type = cmd;
+			if (cmd[RIGHT] != 0) {
+				p.type = cmd[RIGHT];
 				packetbuf_copyfrom(&p,sizeof(struct my_packet));
 				runicast_send(&uc, &addr[RIGHT], MAX_RETRANSMISSIONS);
 			}
 		}
 		if (my_id == ID_MOIST_L) {
 			cmd = measure_moisture();
-			if (cmd != 0) {
-				p.type = cmd;
+			if (cmd[LEFT] != 0) {
+				p.type = cmd[LEFT];
 				packetbuf_copyfrom(&p,sizeof(struct my_packet));
 				runicast_send(&uc, &addr[LEFT], MAX_RETRANSMISSIONS);
 			}
 		}
 		else if (my_id == ID_LIGHT) {  //internal sensors node
 			cmd = measure_light(); 
-			if (cmd != 0) {
-				p.type = cmd;
-				packetbuf_copyfrom(&p,sizeof(struct my_packet));
-				runicast_send(&uc, &addr[LEFT], MAX_RETRANSMISSIONS);
+			for (i = 0; i < 2; i++) {
+				if (cmd[i] != 0) {
+					p.type = cmd[i];
+					packetbuf_copyfrom(&p,sizeof(struct my_packet));
+					runicast_send(&uc, &addr[i], MAX_RETRANSMISSIONS);
+				}
 			}
 
 			cmd = measure_temperature();
-			if (cmd != 0) {
-				p.type = cmd;
-				packetbuf_copyfrom(&p,sizeof(struct my_packet));
-				runicast_send(&uc, &addr, MAX_RETRANSMISSIONS);
+			for (i = 0; i < 2; i++) {
+				if (cmd[i] != 0) {
+					p.type = cmd[i];
+					packetbuf_copyfrom(&p,sizeof(struct my_packet));
+					runicast_send(&uc, &addr[i], MAX_RETRANSMISSIONS);
+				}
 			}
 
 			cmd = measure_humidity();
-			if (cmd != 0) {
-				p.type = cmd;
-				packetbuf_copyfrom(&p,sizeof(struct my_packet));
-				runicast_send(&uc, &addr, MAX_RETRANSMISSIONS);
+			for (i = 0; i < 2; i++) {
+				if (cmd[i] != 0) {
+					p.type = cmd[i];
+					packetbuf_copyfrom(&p,sizeof(struct my_packet));
+					runicast_send(&uc, &addr[i], MAX_RETRANSMISSIONS);
+				}
 			}
 		}
 		else if (my_id == ID_CO2) {
 			cmd = measure_co2();
-			if (cmd != 0) {
-				p.type = cmd;
-				packetbuf_copyfrom(&p,sizeof(struct my_packet));
-				runicast_send(&uc, &addr, MAX_RETRANSMISSIONS);
+			for (i = 0; i < 2; i++) {
+				if (cmd[i] != 0) {
+					p.type = cmd[i];
+					packetbuf_copyfrom(&p,sizeof(struct my_packet));
+					runicast_send(&uc, &addr[i], MAX_RETRANSMISSIONS);
+				}
 			}
 		}
 		
