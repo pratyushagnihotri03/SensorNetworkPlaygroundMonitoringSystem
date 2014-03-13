@@ -1,6 +1,6 @@
 #include "moisture.h"
 
-uint8_t measure_moisture()
+uint8_t measure_moisture(static uint16_t my_id)
 {
 	static uint16_t raw;
 	static double voltage, moisture;
@@ -17,6 +17,11 @@ uint8_t measure_moisture()
 		moisture = 48.08 * voltage - 47.5;
 	else
 		moisture = 26.32 * voltage - 7.89;
+
+	if (my_id == ID_MOIS_R)
+		printf ("Peperomia ");
+	else
+		printf ("Kalanchoe ");
 
 	printf ("Soil Moisture: %u.%u\n", (int)moisture, (int)(moisture * 100) % 100);
 

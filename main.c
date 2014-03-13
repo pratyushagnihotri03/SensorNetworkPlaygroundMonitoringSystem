@@ -190,7 +190,7 @@ PROCESS_THREAD(main_process, ev, data)
 		PROCESS_WAIT_UNTIL(etimer_expired(&et));
 
 		if (my_id == ID_MOIST_R) {
-			cmd = measure_moisture();
+			cmd = measure_moisture(my_id);
 			if (cmd[RIGHT] != 0) {
 				p.type = cmd[RIGHT];
 				packetbuf_copyfrom(&p,sizeof(struct my_packet));
@@ -198,7 +198,7 @@ PROCESS_THREAD(main_process, ev, data)
 			}
 		}
 		if (my_id == ID_MOIST_L) {
-			cmd = measure_moisture();
+			cmd = measure_moisture(my_id);
 			if (cmd[LEFT] != 0) {
 				p.type = cmd[LEFT];
 				packetbuf_copyfrom(&p,sizeof(struct my_packet));
