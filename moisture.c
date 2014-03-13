@@ -30,12 +30,13 @@ void measure_moisture(uint8_t cmd[2], uint16_t my_id)
 
 	printf ("Soil Moisture: %u.%u\n", (int)moisture, (int)(moisture * 100) % 100);
 
-	state_moisture[0] = 0;
-	state_moisture[1] = 0;
+	state_moisture[RIGHT] = 0;
+	state_moisture[LEFT] = 0;
 
 //------------------------------MOISTURE Actuators------------------------ //
 	if(state_moisture[plant] != COMMAND_TYPE_MOIS_LOW && raw < THRESHOLD_MOIS_LOW[plant]) {
-		state_moisture[plant] = COMMAND_TYPE_MOIS_LOW;
+		state_moisture[plant] = 0;
+		printf("MOISTURE LOW!\n");
 		return;
 	}
 	else if (state_moisture[plant] != COMMAND_TYPE_MOIS_HIGH && raw > THRESHOLD_MOIS_HIGH[plant]) {

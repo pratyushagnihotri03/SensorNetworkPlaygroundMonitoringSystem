@@ -60,7 +60,8 @@ void measure_humidity(uint8_t cmd[2])
 
 		if(state_humidity[i] != COMMAND_TYPE_HUMID_LOW 
 			&& raw_humidity < THRESHOLD_HUMID_LOW[i]) {
-			state_humidity[i] = COMMAND_TYPE_HUMID_LOW;
+			state_humidity[i] = 0;
+			printf("HUMIDITY LOW!\n");
 			continue;
 		}
 		else if (state_humidity[i] != COMMAND_TYPE_HUMID_HIGH
@@ -107,7 +108,8 @@ void measure_temperature(uint8_t cmd[2])
 		}
 		else if (state_temp[i] != COMMAND_TYPE_TEMP_HIGH
 			&& temperature > THRESHOLD_TEMP_HIGH[i] ){
-			state_temp[i] = COMMAND_TYPE_TEMP_HIGH;
+			state_temp[i] = 0;
+			printf("TEMP HIGH!\n");
 			continue;
 		}
 		else if (state_temp[i] != COMMAND_TYPE_TEMP_OK
