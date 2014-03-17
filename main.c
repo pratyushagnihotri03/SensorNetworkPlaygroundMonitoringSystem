@@ -31,19 +31,19 @@ recv_runicast(struct runicast_conn *c, const rimeaddr_t *from, uint8_t seqno)
     printf("TEMP LOW! received from %d.%d\n",
            from->u8[0], from->u8[1]);
 	//Turning on the HEATER.
-   	 printf("PG:HEAT ON\n");  
+   	//printf("PG:HEAT ON\n");  
 	 }
   else if(p->type == TEMP_OK) {
     printf("TEMP OK! received from %d.%d\n",
            from->u8[0], from->u8[1]); 
 	//Turning off the Heater.
-	 printf("PG:HEAT OFF\n");  
+	// printf("PG:HEAT OFF\n");  
 	}
   else if(p->type == TEMP_HIGH) {
     printf("TEMP HIGH! received from %d.%d\n",
            from->u8[0], from->u8[1]);
 	 //Turning on the Fan.
-  // 	 printf("PG:FAN ON\n");  
+   	// printf("PG:FAN ON\n");  
 	}
 //------------------- CO2---------------------------
   
@@ -91,13 +91,13 @@ recv_runicast(struct runicast_conn *c, const rimeaddr_t *from, uint8_t seqno)
     printf("HUMIDITY OK! received from %d.%d\n",
            from->u8[0], from->u8[1]); 
 	//Turning off the Fan.
-   	 printf("PG:FAN OFF\n");
+   	// printf("PG:FAN OFF\n");
 	}
   else if(p->type == HUMID_HIGH) {
     printf("HUMIDITY HIGH! received from %d.%d\n",
            from->u8[0], from->u8[1]);
  	//Turning on the Fan.
-   	 printf("PG:FAN ON\n"); 
+   	// printf("PG:FAN ON\n"); 
        }
 
 //-------------------SOIL MOISTURE-----------------------
@@ -112,13 +112,13 @@ recv_runicast(struct runicast_conn *c, const rimeaddr_t *from, uint8_t seqno)
     printf("MOSITURE OK! received from %d.%d\n",
            from->u8[0], from->u8[1]);
  	//Turning off the heater.
-   	 //printf("PG:HEAT OFF\n"); 
+   	 printf("PG:HEAT OFF\n"); 
 	}
   else if(p->type == MOIS_HIGH) {
     printf("MOSITURE HIGH! received from %d.%d\n",
            from->u8[0], from->u8[1]);
  	//Turning on the heater.
-   	 //printf("PG:HEAT ON\n");
+   	 printf("PG:HEAT ON\n");
         }
   
 }
@@ -145,7 +145,7 @@ static struct runicast_conn uc;
 PROCESS(main_process, "main");
 AUTOSTART_PROCESSES(&main_process);
 
-static struct etimer et;
+static struct etimer et,delay;
 static uint16_t my_id;
 PROCESS_THREAD(main_process, ev, data)
 {
@@ -205,6 +205,8 @@ PROCESS_THREAD(main_process, ev, data)
 			measure_moisture(my_id);
 			if (cmd[RIGHT] != 0) {
 				p.type = cmd[RIGHT];
+				etimer_set(&delay, CLOCK_SECOND * 0.02);
+				PROCESS_WAIT_UNTIL(etimer_expired(&delay));
 				packetbuf_copyfrom(&p,sizeof(struct my_packet));
 				runicast_send(&uc, &addr[RIGHT], MAX_RETRANSMISSIONS);
 			}
@@ -213,6 +215,8 @@ PROCESS_THREAD(main_process, ev, data)
 			measure_moisture(my_id);
 			if (cmd[LEFT] != 0) {
 				p.type = cmd[LEFT];
+				etimer_set(&delay, CLOCK_SECOND * 0.02);
+				PROCESS_WAIT_UNTIL(etimer_expired(&delay));
 				packetbuf_copyfrom(&p,sizeof(struct my_packet));
 				runicast_send(&uc, &addr[LEFT], MAX_RETRANSMISSIONS);
 			}
@@ -222,6 +226,8 @@ PROCESS_THREAD(main_process, ev, data)
 			for (i = 0; i < 2; i++) {
 				if (cmd[i] != 0) {
 					p.type = cmd[i];
+					etimer_set(&delay, CLOCK_SECOND * 0.02);
+					PROCESS_WAIT_UNTIL(etimer_expired(&delay));
 					packetbuf_copyfrom(&p,sizeof(struct my_packet));
 					runicast_send(&uc, &addr[i], MAX_RETRANSMISSIONS);
 				}
@@ -231,6 +237,8 @@ PROCESS_THREAD(main_process, ev, data)
 			for (i = 0; i < 2; i++) {
 				if (cmd[i] != 0) {
 					p.type = cmd[i];
+					etimer_set(&delay, CLOCK_SECOND * 0.02);
+				        PROCESS_WAIT_UNTIL(etimer_expired(&delay));
 					packetbuf_copyfrom(&p,sizeof(struct my_packet));
 					runicast_send(&uc, &addr[i], MAX_RETRANSMISSIONS);
 				}
@@ -240,6 +248,8 @@ PROCESS_THREAD(main_process, ev, data)
 			for (i = 0; i < 2; i++) {
 				if (cmd[i] != 0) {
 					p.type = cmd[i];
+					etimer_set(&delay, CLOCK_SECOND * 0.02);
+				        PROCESS_WAIT_UNTIL(etimer_expired(&delay));
 					packetbuf_copyfrom(&p,sizeof(struct my_packet));
 					runicast_send(&uc, &addr[i], MAX_RETRANSMISSIONS);
 				}
@@ -250,6 +260,8 @@ PROCESS_THREAD(main_process, ev, data)
 			for (i = 0; i < 2; i++) {
 				if (cmd[i] != 0) {
 					p.type = cmd[i];
+					etimer_set(&delay, CLOCK_SECOND * 3.5);
+				        PROCESS_WAIT_UNTIL(etimer_expired(&delay));
 					packetbuf_copyfrom(&p,sizeof(struct my_packet));
 					runicast_send(&uc, &addr[i], MAX_RETRANSMISSIONS);
 				}
