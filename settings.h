@@ -17,7 +17,7 @@
 #define ID_CO2 3002
 
 
-/* set threshold values for {LEFT, RIGHT} plant in main.c */
+/* set threshold values for {RIGHT, LEFT} plant in main.c */
 extern const double THRESHOLD_CO2_HIGH[];
 extern const double THRESHOLD_CO2_LOW[];
 extern const uint32_t THRESHOLD_LIGHT[];
@@ -31,11 +31,11 @@ extern const uint16_t THRESHOLD_HUMID_HIGH[];
 extern const char * plant_name[];
 
 //offset values for debouncing
-#define OFFSET_MOIST 100
-#define OFFSET_HUMIDITY 3
-#define OFFSET_LIGHT 40
+#define OFFSET_MOIST 0//100
+#define OFFSET_HUMIDITY 0//3
+#define OFFSET_LIGHT 0//20
 #define OFFSET_TEMP 0
-#define OFFSET_CO2 10
+#define OFFSET_CO2 0//10
 
 #define MEASURING_PERIOD 5 //seconds
 

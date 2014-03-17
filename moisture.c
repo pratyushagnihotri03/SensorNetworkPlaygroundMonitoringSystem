@@ -7,7 +7,7 @@ void measure_moisture(uint16_t my_id)
 	static uint8_t plant;
         static uint8_t state_moisture[2];
 
-	raw = vh400.value(ADC3);
+	raw = vh400.value(ADC0);
 	voltage = 3 * raw / 4096.0;
 
 	if (voltage < 1.1)

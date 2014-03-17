@@ -8,10 +8,10 @@
 
 #define MAX_RETRANSMISSIONS 4
 
-/* set threshold values for {LEFT, RIGHT} plant here */
+/* set threshold values for {RIGHT, LEFT} plant here */
 const double THRESHOLD_CO2_HIGH[] = { 950, 950 };
 const double THRESHOLD_CO2_LOW[] = { 40, 40 };
-const uint32_t THRESHOLD_LIGHT[] = { 680, 1200 };
+const uint32_t THRESHOLD_LIGHT[] = { 300, 400 };
 const double THRESHOLD_TEMP_HIGH[] = { 28, 29 };
 const double THRESHOLD_TEMP_LOW[] = { 24, 12.7 };
 const uint16_t THRESHOLD_MOIS_LOW[] = { 1774, 1502 };
@@ -24,20 +24,22 @@ const char * plant_name[] = {"Peperomia", "Kalanchoe"};
 static void
 recv_runicast(struct runicast_conn *c, const rimeaddr_t *from, uint8_t seqno)
 {
+printf("received something\n");
   struct my_packet * p;
   p=(struct my_packet *)packetbuf_dataptr();
 //------------------ Temperature--------------------
   if(p->type == TEMP_LOW) {
     printf("TEMP LOW! received from %d.%d\n",
            from->u8[0], from->u8[1]);
-	//Turning on the HEATER.
-   	 printf("PG:HEAT ON\n");  
+	//not Turning on the HEATER.
+//fixme: don't send message, just print "temp low"
+   	 printf("Temperature low\n");  
 	 }
   else if(p->type == TEMP_OK) {
     printf("TEMP OK! received from %d.%d\n",
            from->u8[0], from->u8[1]); 
-	//Turning off the Heater.
-	 printf("PG:HEAT OFF\n");  
+	//not Turning off the Heater.
+	 printf("Temperature ok\n");  
 	}
   else if(p->type == TEMP_HIGH) {
     printf("TEMP HIGH! received from %d.%d\n",
@@ -112,13 +114,13 @@ recv_runicast(struct runicast_conn *c, const rimeaddr_t *from, uint8_t seqno)
     printf("MOSITURE OK! received from %d.%d\n",
            from->u8[0], from->u8[1]);
  	//Turning off the heater.
-   	 //printf("PG:HEAT OFF\n"); 
+   	 printf("PG:HEAT OFF\n"); 
 	}
   else if(p->type == MOIS_HIGH) {
     printf("MOSITURE HIGH! received from %d.%d\n",
            from->u8[0], from->u8[1]);
  	//Turning on the heater.
-   	 //printf("PG:HEAT ON\n");
+   	 printf("PG:HEAT ON\n");
         }
   
 }
@@ -180,7 +182,7 @@ PROCESS_THREAD(main_process, ev, data)
 
 
 	//wait for raspberry pi
-	etimer_set(&et, CLOCK_SECOND * (120 + 10 * offset));
+	etimer_set(&et, CLOCK_SECOND * (120 + offset));
 	PROCESS_WAIT_UNTIL(etimer_expired(&et));
 
 
@@ -224,6 +226,8 @@ PROCESS_THREAD(main_process, ev, data)
 					p.type = cmd[i];
 					packetbuf_copyfrom(&p,sizeof(struct my_packet));
 					runicast_send(&uc, &addr[i], MAX_RETRANSMISSIONS);
+//fixme 20ms delay
+					printf("sent light cmd %u to sink #%d, addr=%u.%u\n", cmd[i], i, addr[i].u8[0], addr[i].u8[1]);
 				}
 			}
 
@@ -252,6 +256,7 @@ PROCESS_THREAD(main_process, ev, data)
 					p.type = cmd[i];
 					packetbuf_copyfrom(&p,sizeof(struct my_packet));
 					runicast_send(&uc, &addr[i], MAX_RETRANSMISSIONS);
+					printf("sent co2 cmd to sink #%d, addr=%u.%u\n", i, addr[i].u8[0], addr[i].u8[1]);
 				}
 			}
 		}

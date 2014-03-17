@@ -14,6 +14,7 @@ void measure_light(uint8_t cmd[2])
 	raw_light = (uint32_t)light_sensor.value(LIGHT_SENSOR_PHOTOSYNTHETIC);
 	light = (uint16_t)(((3125 * raw_light) >> 9) & 0xFFFF);
 	printf("Light/lux: %u\n", light);
+	printf("raw light: %u\n", raw_light); 
 
 
 //------------------------------Light Actuators------------------------ //
