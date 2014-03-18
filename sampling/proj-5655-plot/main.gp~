@@ -23,9 +23,9 @@ set style line 6 lt 1 lc rgb "black" lw 2 pt 6
 
 set size 2.0,1.0
 
-set output "soil.eps"
+set output "temperature.eps"
 
-plot "soil.dat" using 1:2 axes x1y1 with impulses \
+plot "temperature.dat" using 1:2 axes x1y1 with impulses \
 	 ls 1 title "{/Arial=14 Time}"
    #  ls 1 title "{/Arial=14 Time}",\
    #  "main.dat" using 3:5 axes x1y1 with impulses \
