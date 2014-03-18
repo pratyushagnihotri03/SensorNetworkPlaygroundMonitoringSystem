@@ -178,6 +178,8 @@ PROCESS_THREAD(main_process, ev, data)
 		SENSORS_ACTIVATE(ds1000_sensor);
 	}
 
+	if (my_id == ID_SINK_R || my_id == ID_SINK_L)
+		printf("PG:ENG\n");
 
 	//wait for raspberry pi
 	etimer_set(&et, CLOCK_SECOND * (120 + offset));
@@ -192,9 +194,6 @@ PROCESS_THREAD(main_process, ev, data)
 		while(1) {
 			PROCESS_YIELD();
 		}
-
-		// never stop actuators??!?
-		printf("PG:ENG\n");
 	}
 
 	while(1) {
