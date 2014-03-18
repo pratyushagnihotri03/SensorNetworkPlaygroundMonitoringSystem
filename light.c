@@ -14,20 +14,23 @@ void measure_light(uint8_t cmd[2])
 	raw_light = (uint32_t)light_sensor.value(LIGHT_SENSOR_PHOTOSYNTHETIC);
 	light = (uint16_t)(((3125 * raw_light) >> 9) & 0xFFFF);
 	printf("Light/lux: %u\n", light);
+	printf("raw light: %u\n", raw_light); 
 
 
 //------------------------------Light Actuators------------------------ //
 
 	for (i = 0; i < 2; i++) {
-		state_light[i] = 0;
+		cmd[i] = 0;
 
-		if(state_light[i] != COMMAND_TYPE_LIGHT_LOW && raw_light < THRESHOLD_LIGHT[i]){
-			state_light[i] = COMMAND_TYPE_LIGHT_LOW;
+		if(state_light[i] != LIGHT_LOW && raw_light < THRESHOLD_LIGHT[i]){
+			state_light[i] = LIGHT_LOW;
+			cmd[i] = LIGHT_LOW;
 			continue;
 		}
-		else if (state_light[i] != COMMAND_TYPE_LIGHT_OK
+		else if (state_light[i] != LIGHT_OK
 			&& raw_light >= THRESHOLD_LIGHT[i] + OFFSET_LIGHT) {
-			state_light[i] = COMMAND_TYPE_LIGHT_OK;
+			state_light[i] = LIGHT_OK;
+			cmd[i] = LIGHT_OK;
 			continue;
 		}
 	}
@@ -40,7 +43,7 @@ void measure_humidity(uint8_t cmd[2])
 	static uint16_t raw_humidity;
 	static double humidity_val;
 	static uint8_t i;
-        uint8_t state_humidity[2];
+        static uint8_t state_humidity[2];
 
 	raw_humidity = sht11_sensor.value(SHT11_SENSOR_HUMIDITY);
 	humidity_val = (temperature - 25) * (0.01 + 0.00008 * raw_humidity)
@@ -56,23 +59,25 @@ void measure_humidity(uint8_t cmd[2])
 //------------------------------HUMIDITY Actuators------------------------ //
 
 	for (i = 0; i < 2; i++) {
-		state_humidity[i] = 0;
+		cmd[i] = 0;
 
-		if(state_humidity[i] != COMMAND_TYPE_HUMID_LOW 
+		if(state_humidity[i] != HUMID_LOW 
 			&& raw_humidity < THRESHOLD_HUMID_LOW[i]) {
-			state_humidity[i] = 0;
-			printf("HUMIDITY LOW!\n");
+			state_humidity[i] = HUMID_LOW;
+			printf("%s Humidity low\n", plant_name[i]);
 			continue;
 		}
-		else if (state_humidity[i] != COMMAND_TYPE_HUMID_HIGH
+		else if (state_humidity[i] != HUMID_HIGH
 			&& raw_humidity > THRESHOLD_HUMID_HIGH[i]) {
-			state_humidity[i] = COMMAND_TYPE_HUMID_HIGH;
+			state_humidity[i] = HUMID_HIGH;
+			cmd[i] = HUMID_HIGH;
 			continue;
 		}
-		else if (state_humidity[i] != COMMAND_TYPE_HUMID_OK
+		else if (state_humidity[i] != HUMID_OK
 			&& raw_humidity <= THRESHOLD_HUMID_HIGH[i] - OFFSET_HUMIDITY 
 			&& raw_humidity >= THRESHOLD_HUMID_LOW[i] + OFFSET_HUMIDITY){
-			state_humidity[i] = COMMAND_TYPE_HUMID_OK;
+			state_humidity[i] = HUMID_OK;
+			cmd[i] = HUMID_OK;
 			continue;
 		}
 	}
@@ -85,7 +90,7 @@ void measure_temperature(uint8_t cmd[2])
 	static uint16_t raw_temp;
 	static uint8_t i;
 	static int temp2;
-	uint8_t state_temp[2];
+	static uint8_t state_temp[2];
 
 	raw_temp = sht11_sensor.value(SHT11_SENSOR_TEMP);
 	temperature = 0.01 * raw_temp - 39.6;
@@ -99,23 +104,25 @@ void measure_temperature(uint8_t cmd[2])
 //------------------------------Temperature Actuators------------------------ //
 
 	for (i = 0; i < 2; i++) {
-		state_temp[i] = 0;
+		cmd[i] = 0;
 
-		if(state_temp[i] != COMMAND_TYPE_TEMP_LOW
+		if(state_temp[i] != TEMP_LOW
 			&& temperature < THRESHOLD_TEMP_LOW[i] ){
-			state_temp[i] = COMMAND_TYPE_TEMP_LOW;
+			state_temp[i] = TEMP_LOW;
+			cmd[i] = TEMP_LOW;
 			continue;
 		}
-		else if (state_temp[i] != COMMAND_TYPE_TEMP_HIGH
+		else if (state_temp[i] != TEMP_HIGH
 			&& temperature > THRESHOLD_TEMP_HIGH[i] ){
-			state_temp[i] = 0;
-			printf("TEMP HIGH!\n");
+			state_temp[i] = TEMP_HIGH;
+			printf("%s Temperature too high\n", plant_name[i]);
 			continue;
 		}
-		else if (state_temp[i] != COMMAND_TYPE_TEMP_OK
+		else if (state_temp[i] != TEMP_OK
 			&& temperature <= THRESHOLD_TEMP_HIGH[i] - OFFSET_TEMP
 			&& temperature >= THRESHOLD_TEMP_LOW[i] + OFFSET_TEMP) {
-			state_temp[i] = COMMAND_TYPE_TEMP_OK;
+			state_temp[i] = TEMP_OK;
+			cmd[i] = TEMP_OK;
 			continue;
 		}
 	}

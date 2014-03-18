@@ -8,16 +8,17 @@
 
 #define MAX_RETRANSMISSIONS 4
 
-/* set threshold values for {LEFT, RIGHT} plant here */
+/* set threshold values for {RIGHT, LEFT} plant here */
 const double THRESHOLD_CO2_HIGH[] = { 950, 950 };
 const double THRESHOLD_CO2_LOW[] = { 40, 40 };
-const uint32_t THRESHOLD_LIGHT[] = { 680, 1200 };
+const uint32_t THRESHOLD_LIGHT[] = { 300, 400 };
 const double THRESHOLD_TEMP_HIGH[] = { 28, 29 };
 const double THRESHOLD_TEMP_LOW[] = { 24, 12.7 };
 const uint16_t THRESHOLD_MOIS_LOW[] = { 1774, 1502 };
 const uint16_t THRESHOLD_MOIS_HIGH[] = { 2428, 1917 };
 const uint16_t THRESHOLD_HUMID_LOW[] = { 20, 20 };
 const uint16_t THRESHOLD_HUMID_HIGH[] = { 40, 40 };
+const char * plant_name[] = {"Peperomia", "Kalanchoe"};
 
 /* Unicast Receive Function */
 static void
@@ -26,52 +27,52 @@ recv_runicast(struct runicast_conn *c, const rimeaddr_t *from, uint8_t seqno)
   struct my_packet * p;
   p=(struct my_packet *)packetbuf_dataptr();
 //------------------ Temperature--------------------
-  if(p->type == COMMAND_TYPE_TEMP_LOW) {
+  if(p->type == TEMP_LOW) {
     printf("TEMP LOW! received from %d.%d\n",
            from->u8[0], from->u8[1]);
 	//Turning on the HEATER.
-   	 printf("PG:HEAT ON\n");  
+   	//printf("PG:HEAT ON\n");  
 	 }
-  else if(p->type == COMMAND_TYPE_TEMP_OK) {
+  else if(p->type == TEMP_OK) {
     printf("TEMP OK! received from %d.%d\n",
            from->u8[0], from->u8[1]); 
 	//Turning off the Heater.
-	 printf("PG:HEAT OFF\n");  
+	// printf("PG:HEAT OFF\n");  
 	}
-  else if(p->type == COMMAND_TYPE_TEMP_HIGH) {
+  else if(p->type == TEMP_HIGH) {
     printf("TEMP HIGH! received from %d.%d\n",
            from->u8[0], from->u8[1]);
 	 //Turning on the Fan.
-  // 	 printf("PG:FAN ON\n");  
+   	// printf("PG:FAN ON\n");  
 	}
 //------------------- CO2---------------------------
   
-  if(p->type == COMMAND_TYPE_CO2_HIGH) {
+  if(p->type == CO2_HIGH) {
     printf("CO2 HIGH! received from %d.%d\n",
            from->u8[0], from->u8[1]); 
     	//Turning on the Fan.
    	 printf("PG:FAN ON\n");  
 	}
-  else if(p->type == COMMAND_TYPE_CO2_OK) {
+  else if(p->type == CO2_OK) {
     printf("CO2 OK! received from %d.%d\n",
            from->u8[0], from->u8[1]); 
 	//Turning off the Fan.
    	 printf("PG:FAN OFF\n"); 
 	}
-  else if(p->type == COMMAND_TYPE_CO2_LOW) {
+  else if(p->type == CO2_LOW) {
     printf("CO2 LOW! received from %d.%d\n",
            from->u8[0], from->u8[1]); 
 	//GIVE CO2.
    //	 printf(" ! GIVE CO2 !\n"); 
 	}
 //------------------- LIGHT--------------------------- 
-  if(p->type == COMMAND_TYPE_LIGHT_LOW) {
+  if(p->type == LIGHT_LOW) {
     printf("LIGHT LOW! received from %d.%d\n",
            from->u8[0], from->u8[1]); 
  	//Turning on the lamp.
    	 printf("PG:LIGHT ON\n");
 	}
-  else if(p->type == COMMAND_TYPE_LIGHT_OK) {
+  else if(p->type == LIGHT_OK) {
     printf("LIGHT OK! received from %d.%d\n",
            from->u8[0], from->u8[1]);
  	//Turning off the lamp.
@@ -80,44 +81,44 @@ recv_runicast(struct runicast_conn *c, const rimeaddr_t *from, uint8_t seqno)
 
 //-------------------HUMIDITY---------------------------
 
-  if(p->type == COMMAND_TYPE_HUMID_LOW) {
+  if(p->type == HUMID_LOW) {
     printf("HUMIDITY LOW! received from %d.%d\n",
            from->u8[0], from->u8[1]); 
  	//Turning on the Heater.
    //	 printf("PG:HEAT ON\n");
 	}
-  else if(p->type == COMMAND_TYPE_HUMID_OK) {
+  else if(p->type == HUMID_OK) {
     printf("HUMIDITY OK! received from %d.%d\n",
            from->u8[0], from->u8[1]); 
 	//Turning off the Fan.
-   	 printf("PG:FAN OFF\n");
+   	// printf("PG:FAN OFF\n");
 	}
-  else if(p->type == COMMAND_TYPE_HUMID_HIGH) {
+  else if(p->type == HUMID_HIGH) {
     printf("HUMIDITY HIGH! received from %d.%d\n",
            from->u8[0], from->u8[1]);
  	//Turning on the Fan.
-   	 printf("PG:FAN ON\n"); 
+   	// printf("PG:FAN ON\n"); 
        }
 
 //-------------------SOIL MOISTURE-----------------------
 
-  if(p->type == COMMAND_TYPE_MOIS_LOW) {
+  if(p->type == MOIS_LOW) {
     printf("MOSITURE LOW! received from %d.%d\n",
            from->u8[0], from->u8[1]); 
  	//Give water to the plant.
    	 //printf("! GIVE WATER !\n");
 	}
-  else if(p->type == COMMAND_TYPE_MOIS_OK) {
+  else if(p->type == MOIS_OK) {
     printf("MOSITURE OK! received from %d.%d\n",
            from->u8[0], from->u8[1]);
  	//Turning off the heater.
-   	 //printf("PG:HEAT OFF\n"); 
+   	 printf("PG:HEAT OFF\n"); 
 	}
-  else if(p->type == COMMAND_TYPE_MOIS_HIGH) {
+  else if(p->type == MOIS_HIGH) {
     printf("MOSITURE HIGH! received from %d.%d\n",
            from->u8[0], from->u8[1]);
  	//Turning on the heater.
-   	 //printf("PG:HEAT ON\n");
+   	 printf("PG:HEAT ON\n");
         }
   
 }
@@ -164,22 +165,22 @@ PROCESS_THREAD(main_process, ev, data)
 	addr[LEFT].u8[1] = ID_SINK_L / 256;
 
 	if (my_id == ID_MOIST_R || my_id == ID_MOIST_L) {
-		offset = 1;
+		offset = 60;
 		SENSORS_ACTIVATE(vh400);
 	}
 	else if (my_id == ID_LIGHT) {
-		offset = 2;
+		offset = 61;
 		SENSORS_ACTIVATE(light_sensor);
 		SENSORS_ACTIVATE(sht11_sensor);
 	}
 	else if (my_id == ID_CO2) {
-		offset = 3;
+		offset = 62;
 		SENSORS_ACTIVATE(ds1000_sensor);
 	}
 
 
 	//wait for raspberry pi
-	etimer_set(&et, CLOCK_SECOND * (120 + 10 * offset));
+	etimer_set(&et, CLOCK_SECOND * (120 + offset));
 	PROCESS_WAIT_UNTIL(etimer_expired(&et));
 
 
@@ -201,7 +202,7 @@ PROCESS_THREAD(main_process, ev, data)
 		PROCESS_WAIT_UNTIL(etimer_expired(&et));
 
 		if (my_id == ID_MOIST_R) {
-			measure_moisture(cmd, my_id);
+			measure_moisture(my_id);
 			if (cmd[RIGHT] != 0) {
 				p.type = cmd[RIGHT];
 				packetbuf_copyfrom(&p,sizeof(struct my_packet));
@@ -209,7 +210,7 @@ PROCESS_THREAD(main_process, ev, data)
 			}
 		}
 		if (my_id == ID_MOIST_L) {
-			measure_moisture(cmd, my_id);
+			measure_moisture(my_id);
 			if (cmd[LEFT] != 0) {
 				p.type = cmd[LEFT];
 				packetbuf_copyfrom(&p,sizeof(struct my_packet));
@@ -223,6 +224,8 @@ PROCESS_THREAD(main_process, ev, data)
 					p.type = cmd[i];
 					packetbuf_copyfrom(&p,sizeof(struct my_packet));
 					runicast_send(&uc, &addr[i], MAX_RETRANSMISSIONS);
+					etimer_set(&et, CLOCK_SECOND * 0.02);
+					PROCESS_WAIT_UNTIL(etimer_expired(&et));
 				}
 			}
 
@@ -232,6 +235,8 @@ PROCESS_THREAD(main_process, ev, data)
 					p.type = cmd[i];
 					packetbuf_copyfrom(&p,sizeof(struct my_packet));
 					runicast_send(&uc, &addr[i], MAX_RETRANSMISSIONS);
+					etimer_set(&et, CLOCK_SECOND * 0.02);
+				   PROCESS_WAIT_UNTIL(etimer_expired(&et));
 				}
 			}
 
@@ -239,6 +244,10 @@ PROCESS_THREAD(main_process, ev, data)
 			for (i = 0; i < 2; i++) {
 				if (cmd[i] != 0) {
 					p.type = cmd[i];
+					if(i==1){
+						etimer_set(&et, CLOCK_SECOND * 0.02);
+				      PROCESS_WAIT_UNTIL(etimer_expired(&et));
+					}
 					packetbuf_copyfrom(&p,sizeof(struct my_packet));
 					runicast_send(&uc, &addr[i], MAX_RETRANSMISSIONS);
 				}
@@ -249,6 +258,10 @@ PROCESS_THREAD(main_process, ev, data)
 			for (i = 0; i < 2; i++) {
 				if (cmd[i] != 0) {
 					p.type = cmd[i];
+					if(i==1){
+						etimer_set(&et, CLOCK_SECOND * 0.02);
+				      PROCESS_WAIT_UNTIL(etimer_expired(&et));
+					}
 					packetbuf_copyfrom(&p,sizeof(struct my_packet));
 					runicast_send(&uc, &addr[i], MAX_RETRANSMISSIONS);
 				}
