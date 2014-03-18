@@ -145,7 +145,7 @@ static struct runicast_conn uc;
 PROCESS(main_process, "main");
 AUTOSTART_PROCESSES(&main_process);
 
-static struct etimer et,delay;
+static struct etimer et;
 static uint16_t my_id;
 PROCESS_THREAD(main_process, ev, data)
 {
@@ -205,8 +205,6 @@ PROCESS_THREAD(main_process, ev, data)
 			measure_moisture(my_id);
 			if (cmd[RIGHT] != 0) {
 				p.type = cmd[RIGHT];
-				etimer_set(&delay, CLOCK_SECOND * 0.02);
-				PROCESS_WAIT_UNTIL(etimer_expired(&delay));
 				packetbuf_copyfrom(&p,sizeof(struct my_packet));
 				runicast_send(&uc, &addr[RIGHT], MAX_RETRANSMISSIONS);
 			}
@@ -215,8 +213,6 @@ PROCESS_THREAD(main_process, ev, data)
 			measure_moisture(my_id);
 			if (cmd[LEFT] != 0) {
 				p.type = cmd[LEFT];
-				etimer_set(&delay, CLOCK_SECOND * 0.02);
-				PROCESS_WAIT_UNTIL(etimer_expired(&delay));
 				packetbuf_copyfrom(&p,sizeof(struct my_packet));
 				runicast_send(&uc, &addr[LEFT], MAX_RETRANSMISSIONS);
 			}
@@ -226,12 +222,10 @@ PROCESS_THREAD(main_process, ev, data)
 			for (i = 0; i < 2; i++) {
 				if (cmd[i] != 0) {
 					p.type = cmd[i];
-					if(i==1){
-					etimer_set(&delay, CLOCK_SECOND * 0.02);
-					PROCESS_WAIT_UNTIL(etimer_expired(&delay));
-					}
 					packetbuf_copyfrom(&p,sizeof(struct my_packet));
 					runicast_send(&uc, &addr[i], MAX_RETRANSMISSIONS);
+					etimer_set(&et, CLOCK_SECOND * 0.02);
+					PROCESS_WAIT_UNTIL(etimer_expired(&et));
 				}
 			}
 
@@ -239,12 +233,10 @@ PROCESS_THREAD(main_process, ev, data)
 			for (i = 0; i < 2; i++) {
 				if (cmd[i] != 0) {
 					p.type = cmd[i];
-					if(i==1){
-					etimer_set(&delay, CLOCK_SECOND * 0.02);
-				        PROCESS_WAIT_UNTIL(etimer_expired(&delay));
-					}
 					packetbuf_copyfrom(&p,sizeof(struct my_packet));
 					runicast_send(&uc, &addr[i], MAX_RETRANSMISSIONS);
+					etimer_set(&et, CLOCK_SECOND * 0.02);
+				   PROCESS_WAIT_UNTIL(etimer_expired(&et));
 				}
 			}
 
@@ -253,8 +245,8 @@ PROCESS_THREAD(main_process, ev, data)
 				if (cmd[i] != 0) {
 					p.type = cmd[i];
 					if(i==1){
-					etimer_set(&delay, CLOCK_SECOND * 0.02);
-				        PROCESS_WAIT_UNTIL(etimer_expired(&delay));
+						etimer_set(&et, CLOCK_SECOND * 0.02);
+				      PROCESS_WAIT_UNTIL(etimer_expired(&et));
 					}
 					packetbuf_copyfrom(&p,sizeof(struct my_packet));
 					runicast_send(&uc, &addr[i], MAX_RETRANSMISSIONS);
@@ -267,8 +259,8 @@ PROCESS_THREAD(main_process, ev, data)
 				if (cmd[i] != 0) {
 					p.type = cmd[i];
 					if(i==1){
-					etimer_set(&delay, CLOCK_SECOND * 0.02);
-				        PROCESS_WAIT_UNTIL(etimer_expired(&delay));
+						etimer_set(&et, CLOCK_SECOND * 0.02);
+				      PROCESS_WAIT_UNTIL(etimer_expired(&et));
 					}
 					packetbuf_copyfrom(&p,sizeof(struct my_packet));
 					runicast_send(&uc, &addr[i], MAX_RETRANSMISSIONS);
