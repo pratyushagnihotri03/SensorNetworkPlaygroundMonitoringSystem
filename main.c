@@ -169,6 +169,7 @@ PROCESS_THREAD(main_process, ev, data)
 			measure_light(cmd); 
 			for (i = 0; i < 2; i++) {
 				if (cmd[i] != 0) {
+					printf("sending to sink i = %d\n", i);
 					p.type = cmd[i];
 					packetbuf_copyfrom(&p,sizeof(struct my_packet));
 					runicast_send(&uc, &addr[i], MAX_RETRANSMISSIONS);
