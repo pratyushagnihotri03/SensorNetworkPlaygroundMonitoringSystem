@@ -165,16 +165,16 @@ PROCESS_THREAD(main_process, ev, data)
 	addr[LEFT].u8[1] = ID_SINK_L / 256;
 
 	if (my_id == ID_MOIST_R || my_id == ID_MOIST_L) {
-		offset = 1;
+		offset = 60;
 		SENSORS_ACTIVATE(vh400);
 	}
 	else if (my_id == ID_LIGHT) {
-		offset = 2;
+		offset = 61;
 		SENSORS_ACTIVATE(light_sensor);
 		SENSORS_ACTIVATE(sht11_sensor);
 	}
 	else if (my_id == ID_CO2) {
-		offset = 3;
+		offset = 62;
 		SENSORS_ACTIVATE(ds1000_sensor);
 	}
 
