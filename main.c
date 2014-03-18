@@ -29,47 +29,52 @@ recv_runicast(struct runicast_conn *c, const rimeaddr_t *from, uint8_t seqno)
 
 //------------------- CO2---------------------------
   
-  if(p->type == CO2_HIGH) {
-    printf("CO2 HIGH! received from %d.%d\n",
-           from->u8[0], from->u8[1]); 
-    	//Turning on the Fan.
-   	 printf("PG:FAN ON\n");  
+	if(p->type == CO2_HIGH) {
+		printf("CO2 HIGH! received from %d.%d\n",
+			from->u8[0], from->u8[1]); 
+		//Turning on the Fan.
+   	printf("PG:FAN ON\n");  
+		return;
 	}
-  else if(p->type == CO2_OK) {
-    printf("CO2 OK! received from %d.%d\n",
-           from->u8[0], from->u8[1]); 
-	//Turning off the Fan.
-   	 printf("PG:FAN OFF\n"); 
+	if(p->type == CO2_OK) {
+		printf("CO2 OK! received from %d.%d\n",
+			from->u8[0], from->u8[1]); 
+		//Turning off the Fan.
+   	printf("PG:FAN OFF\n"); 
+		return;
 	}
 //------------------- LIGHT--------------------------- 
-  if(p->type == LIGHT_LOW) {
-    printf("LIGHT LOW! received from %d.%d\n",
-           from->u8[0], from->u8[1]); 
- 	//Turning on the lamp.
-   	 printf("PG:LIGHT ON\n");
+	if(p->type == LIGHT_LOW) {
+		printf("LIGHT LOW! received from %d.%d\n",
+			from->u8[0], from->u8[1]); 
+		//Turning on the lamp.
+   	printf("PG:LIGHT ON\n");
+		return;
 	}
-  else if(p->type == LIGHT_OK) {
-    printf("LIGHT OK! received from %d.%d\n",
-           from->u8[0], from->u8[1]);
- 	//Turning off the lamp.
-   	 printf("PG:LIGHT OFF\n");
+	if(p->type == LIGHT_OK) {
+		printf("LIGHT OK! received from %d.%d\n",
+			from->u8[0], from->u8[1]);
+		//Turning off the lamp.
+   	printf("PG:LIGHT OFF\n");
+		return;
 	}
 
 //-------------------SOIL MOISTURE-----------------------
 
-  else if(p->type == MOIS_OK) {
-    printf("MOSITURE OK! received from %d.%d\n",
+	if(p->type == MOIS_OK) {
+		printf("MOSITURE OK! received from %d.%d\n",
            from->u8[0], from->u8[1]);
- 	//Turning off the heater.
-   	 printf("PG:HEAT OFF\n"); 
+		//Turning off the heater.
+   	printf("PG:HEAT OFF\n"); 
+		return;
 	}
-  else if(p->type == MOIS_HIGH) {
-    printf("MOSITURE HIGH! received from %d.%d\n",
+	if(p->type == MOIS_HIGH) {
+		printf("MOSITURE HIGH! received from %d.%d\n",
            from->u8[0], from->u8[1]);
- 	//Turning on the heater.
-   	 printf("PG:HEAT ON\n");
-        }
-  
+		//Turning on the heater.
+   	printf("PG:HEAT ON\n");
+		return;
+	}
 }
 static void
 sent_runicast(struct runicast_conn *c, const rimeaddr_t *to, uint8_t retransmissions)
