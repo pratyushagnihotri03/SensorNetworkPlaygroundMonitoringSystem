@@ -125,8 +125,8 @@ recv_runicast(struct runicast_conn *c, const rimeaddr_t *from, uint8_t seqno)
 static void
 sent_runicast(struct runicast_conn *c, const rimeaddr_t *to, uint8_t retransmissions)
 {
-//  printf("runicast message sent to %d.%d, retransmissions %d\n",
-//	 to->u8[0], to->u8[1], retransmissions);
+  printf("runicast message sent to %d.%d, retransmissions %d\n",
+	 to->u8[0], to->u8[1], retransmissions);
 }
 static void
 timedout_runicast(struct runicast_conn *c, const rimeaddr_t *to, uint8_t retransmissions)
@@ -224,7 +224,7 @@ PROCESS_THREAD(main_process, ev, data)
 					p.type = cmd[i];
 					packetbuf_copyfrom(&p,sizeof(struct my_packet));
 					runicast_send(&uc, &addr[i], MAX_RETRANSMISSIONS);
-					etimer_set(&et, CLOCK_SECOND * 0.02);
+					etimer_set(&et, CLOCK_SECOND * SENDING_DELAY);
 					PROCESS_WAIT_UNTIL(etimer_expired(&et));
 				}
 			}
@@ -235,7 +235,7 @@ PROCESS_THREAD(main_process, ev, data)
 					p.type = cmd[i];
 					packetbuf_copyfrom(&p,sizeof(struct my_packet));
 					runicast_send(&uc, &addr[i], MAX_RETRANSMISSIONS);
-					etimer_set(&et, CLOCK_SECOND * 0.02);
+					etimer_set(&et, CLOCK_SECOND * SENDING_DELAY);
 				   PROCESS_WAIT_UNTIL(etimer_expired(&et));
 				}
 			}
@@ -245,7 +245,7 @@ PROCESS_THREAD(main_process, ev, data)
 				if (cmd[i] != 0) {
 					p.type = cmd[i];
 					if(i==1){
-						etimer_set(&et, CLOCK_SECOND * 0.02);
+						etimer_set(&et, CLOCK_SECOND * SENDING_DELAY);
 				      PROCESS_WAIT_UNTIL(etimer_expired(&et));
 					}
 					packetbuf_copyfrom(&p,sizeof(struct my_packet));
@@ -259,7 +259,7 @@ PROCESS_THREAD(main_process, ev, data)
 				if (cmd[i] != 0) {
 					p.type = cmd[i];
 					if(i==1){
-						etimer_set(&et, CLOCK_SECOND * 0.02);
+						etimer_set(&et, CLOCK_SECOND * SENDING_DELAY);
 				      PROCESS_WAIT_UNTIL(etimer_expired(&et));
 					}
 					packetbuf_copyfrom(&p,sizeof(struct my_packet));
