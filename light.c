@@ -45,7 +45,7 @@ void measure_light(uint8_t cmd[2])
 
 void measure_humidity()
 {
-	static uint16_t raw_humidity = 0;
+	static uint32_t raw_humidity = 0;
 	static double humidity_val;
 	static uint8_t i;
    	static uint8_t state_humidity[2] = {HUMID_OK, HUMID_OK};
@@ -93,7 +93,7 @@ void measure_humidity()
 
 void measure_temperature()
 {
-	static uint16_t raw_temp = 0;
+	static uint32_t raw_temp = 0;
 	static uint8_t i;
 	static int temp2;
 	static uint8_t state_temp[2] = {TEMP_OK, TEMP_OK};
