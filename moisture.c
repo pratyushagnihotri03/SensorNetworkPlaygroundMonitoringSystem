@@ -5,7 +5,7 @@ void measure_moisture(uint16_t my_id)
 	static uint16_t raw;
 	static double voltage, moisture;
 	static uint8_t plant;
-        static uint8_t state_moisture[2];
+        static uint8_t state_moisture[2] = {MOIS_OK, MOIS_OK};
 
 	raw = vh400.value(ADC0);
 	voltage = 3 * raw / 4096.0;

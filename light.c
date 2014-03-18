@@ -9,7 +9,7 @@ void measure_light(uint8_t cmd[2])
 	static uint32_t raw_light;
 	static uint8_t i;
 	static uint16_t light;
-	static uint8_t state_light[2];
+	static uint8_t state_light[2] = {LIGHT_OK, LIGHT_OK};
 
 	raw_light = (uint32_t)light_sensor.value(LIGHT_SENSOR_PHOTOSYNTHETIC);
 	light = (uint16_t)(((3125 * raw_light) >> 9) & 0xFFFF);
@@ -43,7 +43,7 @@ void measure_humidity(uint8_t cmd[2])
 	static uint16_t raw_humidity;
 	static double humidity_val;
 	static uint8_t i;
-        static uint8_t state_humidity[2];
+   static uint8_t state_humidity[2] = {HUMID_OK, HUMID_OK};
 
 	raw_humidity = sht11_sensor.value(SHT11_SENSOR_HUMIDITY);
 	humidity_val = (temperature - 25) * (0.01 + 0.00008 * raw_humidity)
@@ -90,7 +90,7 @@ void measure_temperature(uint8_t cmd[2])
 	static uint16_t raw_temp;
 	static uint8_t i;
 	static int temp2;
-	static uint8_t state_temp[2];
+	static uint8_t state_temp[2] = {TEMP_OK, TEMP_OK};
 
 	raw_temp = sht11_sensor.value(SHT11_SENSOR_TEMP);
 	temperature = 0.01 * raw_temp - 39.6;
