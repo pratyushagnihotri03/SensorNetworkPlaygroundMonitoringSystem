@@ -26,25 +26,7 @@ recv_runicast(struct runicast_conn *c, const rimeaddr_t *from, uint8_t seqno)
 {
   struct my_packet * p;
   p=(struct my_packet *)packetbuf_dataptr();
-//------------------ Temperature--------------------
-  if(p->type == TEMP_LOW) {
-    printf("TEMP LOW! received from %d.%d\n",
-           from->u8[0], from->u8[1]);
-	//Turning on the HEATER.
-   	//printf("PG:HEAT ON\n");  
-	 }
-  else if(p->type == TEMP_OK) {
-    printf("TEMP OK! received from %d.%d\n",
-           from->u8[0], from->u8[1]); 
-	//Turning off the Heater.
-	// printf("PG:HEAT OFF\n");  
-	}
-  else if(p->type == TEMP_HIGH) {
-    printf("TEMP HIGH! received from %d.%d\n",
-           from->u8[0], from->u8[1]);
-	 //Turning on the Fan.
-   	// printf("PG:FAN ON\n");  
-	}
+
 //------------------- CO2---------------------------
   
   if(p->type == CO2_HIGH) {
@@ -58,12 +40,6 @@ recv_runicast(struct runicast_conn *c, const rimeaddr_t *from, uint8_t seqno)
            from->u8[0], from->u8[1]); 
 	//Turning off the Fan.
    	 printf("PG:FAN OFF\n"); 
-	}
-  else if(p->type == CO2_LOW) {
-    printf("CO2 LOW! received from %d.%d\n",
-           from->u8[0], from->u8[1]); 
-	//GIVE CO2.
-   //	 printf(" ! GIVE CO2 !\n"); 
 	}
 //------------------- LIGHT--------------------------- 
   if(p->type == LIGHT_LOW) {
@@ -79,35 +55,8 @@ recv_runicast(struct runicast_conn *c, const rimeaddr_t *from, uint8_t seqno)
    	 printf("PG:LIGHT OFF\n");
 	}
 
-//-------------------HUMIDITY---------------------------
-
-  if(p->type == HUMID_LOW) {
-    printf("HUMIDITY LOW! received from %d.%d\n",
-           from->u8[0], from->u8[1]); 
- 	//Turning on the Heater.
-   //	 printf("PG:HEAT ON\n");
-	}
-  else if(p->type == HUMID_OK) {
-    printf("HUMIDITY OK! received from %d.%d\n",
-           from->u8[0], from->u8[1]); 
-	//Turning off the Fan.
-   	// printf("PG:FAN OFF\n");
-	}
-  else if(p->type == HUMID_HIGH) {
-    printf("HUMIDITY HIGH! received from %d.%d\n",
-           from->u8[0], from->u8[1]);
- 	//Turning on the Fan.
-   	// printf("PG:FAN ON\n"); 
-       }
-
 //-------------------SOIL MOISTURE-----------------------
 
-  if(p->type == MOIS_LOW) {
-    printf("MOSITURE LOW! received from %d.%d\n",
-           from->u8[0], from->u8[1]); 
- 	//Give water to the plant.
-   	 //printf("! GIVE WATER !\n");
-	}
   else if(p->type == MOIS_OK) {
     printf("MOSITURE OK! received from %d.%d\n",
            from->u8[0], from->u8[1]);
@@ -201,7 +150,7 @@ PROCESS_THREAD(main_process, ev, data)
 		PROCESS_WAIT_UNTIL(etimer_expired(&et));
 
 		if (my_id == ID_MOIST_R) {
-			measure_moisture(my_id);
+			measure_moisture(my_id, cmd);
 			if (cmd[RIGHT] != 0) {
 				p.type = cmd[RIGHT];
 				packetbuf_copyfrom(&p,sizeof(struct my_packet));
@@ -209,7 +158,7 @@ PROCESS_THREAD(main_process, ev, data)
 			}
 		}
 		if (my_id == ID_MOIST_L) {
-			measure_moisture(my_id);
+			measure_moisture(my_id, cmd);
 			if (cmd[LEFT] != 0) {
 				p.type = cmd[LEFT];
 				packetbuf_copyfrom(&p,sizeof(struct my_packet));

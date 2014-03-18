@@ -27,11 +27,15 @@ void measure_co2(uint8_t cmd[2])
 			cmd[i] = CO2_HIGH;
 			continue;
 		}
-		else if (state_co2[i] != CO2_OK 
-			&& co2 <=THRESHOLD_CO2_HIGH[i] - OFFSET_CO2 
+		else if (co2 <=THRESHOLD_CO2_HIGH[i] - OFFSET_CO2 
 			&& co2 >= THRESHOLD_CO2_LOW[i] + OFFSET_CO2){
-			state_co2[i] = CO2_OK;
-			cmd[i] = CO2_OK;
+			if (state_co2[i] == CO2_LOW) {
+				state_co2[i] = CO2_OK;
+				printf("%s C02 ok\n", plant_name[i]);
+			} else if (state_co2[i] == CO2_HIGH) {
+				state_co2[i] = CO2_OK;
+				cmd[i] = CO2_OK;
+			}
 			continue;
 		}
 	}

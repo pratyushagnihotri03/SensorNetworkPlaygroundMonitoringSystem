@@ -10,7 +10,7 @@
 #include <math.h>
 
 void measure_light(uint8_t state_light[2]);
-void measure_temperature(uint8_t state_temp[2]);
-void measure_humidity(uint8_t state_humidity[2]);
+void measure_temperature();
+void measure_humidity();
 
 #endif //__LIGHT_H__

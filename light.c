@@ -14,7 +14,7 @@ void measure_light(uint8_t cmd[2])
 	raw_light = (uint32_t)light_sensor.value(LIGHT_SENSOR_PHOTOSYNTHETIC);
 	light = (uint16_t)(((3125 * raw_light) >> 9) & 0xFFFF);
 	printf("Light/lux: %u\n", light);
-	printf("raw light: %u\n", raw_light); 
+	printf("raw light: %u\n", (uint16_t)raw_light); 
 
 
 //------------------------------Light Actuators------------------------ //
@@ -38,7 +38,7 @@ void measure_light(uint8_t cmd[2])
 	return;
 }
 
-void measure_humidity(uint8_t cmd[2])
+void measure_humidity()
 {
 	static uint16_t raw_humidity;
 	static double humidity_val;
@@ -59,8 +59,6 @@ void measure_humidity(uint8_t cmd[2])
 //------------------------------HUMIDITY Actuators------------------------ //
 
 	for (i = 0; i < 2; i++) {
-		cmd[i] = 0;
-
 		if(state_humidity[i] != HUMID_LOW 
 			&& raw_humidity < THRESHOLD_HUMID_LOW[i]) {
 			state_humidity[i] = HUMID_LOW;
@@ -70,14 +68,14 @@ void measure_humidity(uint8_t cmd[2])
 		else if (state_humidity[i] != HUMID_HIGH
 			&& raw_humidity > THRESHOLD_HUMID_HIGH[i]) {
 			state_humidity[i] = HUMID_HIGH;
-			cmd[i] = HUMID_HIGH;
+			printf("%s Humidity high\n", plant_name[i]);
 			continue;
 		}
 		else if (state_humidity[i] != HUMID_OK
 			&& raw_humidity <= THRESHOLD_HUMID_HIGH[i] - OFFSET_HUMIDITY 
 			&& raw_humidity >= THRESHOLD_HUMID_LOW[i] + OFFSET_HUMIDITY){
 			state_humidity[i] = HUMID_OK;
-			cmd[i] = HUMID_OK;
+			printf("%s Humidity ok\n", plant_name[i]);
 			continue;
 		}
 	}
@@ -85,7 +83,7 @@ void measure_humidity(uint8_t cmd[2])
 	return;
 }
 
-void measure_temperature(uint8_t cmd[2])
+void measure_temperature()
 {
 	static uint16_t raw_temp;
 	static uint8_t i;
@@ -104,25 +102,23 @@ void measure_temperature(uint8_t cmd[2])
 //------------------------------Temperature Actuators------------------------ //
 
 	for (i = 0; i < 2; i++) {
-		cmd[i] = 0;
-
 		if(state_temp[i] != TEMP_LOW
 			&& temperature < THRESHOLD_TEMP_LOW[i] ){
 			state_temp[i] = TEMP_LOW;
-			cmd[i] = TEMP_LOW;
+			printf("%s Temperature low\n", plant_name[i]);
 			continue;
 		}
 		else if (state_temp[i] != TEMP_HIGH
 			&& temperature > THRESHOLD_TEMP_HIGH[i] ){
 			state_temp[i] = TEMP_HIGH;
-			printf("%s Temperature too high\n", plant_name[i]);
+			printf("%s Temperature high\n", plant_name[i]);
 			continue;
 		}
 		else if (state_temp[i] != TEMP_OK
 			&& temperature <= THRESHOLD_TEMP_HIGH[i] - OFFSET_TEMP
 			&& temperature >= THRESHOLD_TEMP_LOW[i] + OFFSET_TEMP) {
 			state_temp[i] = TEMP_OK;
-			cmd[i] = TEMP_OK;
+			printf("%s Temperature ok\n", plant_name[i]);
 			continue;
 		}
 	}
