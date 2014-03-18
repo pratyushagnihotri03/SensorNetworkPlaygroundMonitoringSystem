@@ -24,28 +24,26 @@ const char * plant_name[] = {"Peperomia", "Kalanchoe"};
 static void
 recv_runicast(struct runicast_conn *c, const rimeaddr_t *from, uint8_t seqno)
 {
-printf("received something\n");
   struct my_packet * p;
   p=(struct my_packet *)packetbuf_dataptr();
 //------------------ Temperature--------------------
   if(p->type == TEMP_LOW) {
     printf("TEMP LOW! received from %d.%d\n",
            from->u8[0], from->u8[1]);
-	//not Turning on the HEATER.
-//fixme: don't send message, just print "temp low"
-   	 printf("Temperature low\n");  
+	//Turning on the HEATER.
+   	//printf("PG:HEAT ON\n");  
 	 }
   else if(p->type == TEMP_OK) {
     printf("TEMP OK! received from %d.%d\n",
            from->u8[0], from->u8[1]); 
-	//not Turning off the Heater.
-	 printf("Temperature ok\n");  
+	//Turning off the Heater.
+	// printf("PG:HEAT OFF\n");  
 	}
   else if(p->type == TEMP_HIGH) {
     printf("TEMP HIGH! received from %d.%d\n",
            from->u8[0], from->u8[1]);
 	 //Turning on the Fan.
-  // 	 printf("PG:FAN ON\n");  
+   	// printf("PG:FAN ON\n");  
 	}
 //------------------- CO2---------------------------
   
@@ -93,13 +91,13 @@ printf("received something\n");
     printf("HUMIDITY OK! received from %d.%d\n",
            from->u8[0], from->u8[1]); 
 	//Turning off the Fan.
-   	 printf("PG:FAN OFF\n");
+   	// printf("PG:FAN OFF\n");
 	}
   else if(p->type == HUMID_HIGH) {
     printf("HUMIDITY HIGH! received from %d.%d\n",
            from->u8[0], from->u8[1]);
  	//Turning on the Fan.
-   	 printf("PG:FAN ON\n"); 
+   	// printf("PG:FAN ON\n"); 
        }
 
 //-------------------SOIL MOISTURE-----------------------
@@ -147,7 +145,7 @@ static struct runicast_conn uc;
 PROCESS(main_process, "main");
 AUTOSTART_PROCESSES(&main_process);
 
-static struct etimer et;
+static struct etimer et,delay;
 static uint16_t my_id;
 PROCESS_THREAD(main_process, ev, data)
 {
@@ -207,6 +205,8 @@ PROCESS_THREAD(main_process, ev, data)
 			measure_moisture(my_id);
 			if (cmd[RIGHT] != 0) {
 				p.type = cmd[RIGHT];
+				etimer_set(&delay, CLOCK_SECOND * 0.02);
+				PROCESS_WAIT_UNTIL(etimer_expired(&delay));
 				packetbuf_copyfrom(&p,sizeof(struct my_packet));
 				runicast_send(&uc, &addr[RIGHT], MAX_RETRANSMISSIONS);
 			}
@@ -215,6 +215,8 @@ PROCESS_THREAD(main_process, ev, data)
 			measure_moisture(my_id);
 			if (cmd[LEFT] != 0) {
 				p.type = cmd[LEFT];
+				etimer_set(&delay, CLOCK_SECOND * 0.02);
+				PROCESS_WAIT_UNTIL(etimer_expired(&delay));
 				packetbuf_copyfrom(&p,sizeof(struct my_packet));
 				runicast_send(&uc, &addr[LEFT], MAX_RETRANSMISSIONS);
 			}
@@ -224,10 +226,10 @@ PROCESS_THREAD(main_process, ev, data)
 			for (i = 0; i < 2; i++) {
 				if (cmd[i] != 0) {
 					p.type = cmd[i];
+					etimer_set(&delay, CLOCK_SECOND * 0.02);
+					PROCESS_WAIT_UNTIL(etimer_expired(&delay));
 					packetbuf_copyfrom(&p,sizeof(struct my_packet));
 					runicast_send(&uc, &addr[i], MAX_RETRANSMISSIONS);
-//fixme 20ms delay
-					printf("sent light cmd %u to sink #%d, addr=%u.%u\n", cmd[i], i, addr[i].u8[0], addr[i].u8[1]);
 				}
 			}
 
@@ -235,6 +237,8 @@ PROCESS_THREAD(main_process, ev, data)
 			for (i = 0; i < 2; i++) {
 				if (cmd[i] != 0) {
 					p.type = cmd[i];
+					etimer_set(&delay, CLOCK_SECOND * 0.02);
+				        PROCESS_WAIT_UNTIL(etimer_expired(&delay));
 					packetbuf_copyfrom(&p,sizeof(struct my_packet));
 					runicast_send(&uc, &addr[i], MAX_RETRANSMISSIONS);
 				}
@@ -244,6 +248,8 @@ PROCESS_THREAD(main_process, ev, data)
 			for (i = 0; i < 2; i++) {
 				if (cmd[i] != 0) {
 					p.type = cmd[i];
+					etimer_set(&delay, CLOCK_SECOND * 0.02);
+				        PROCESS_WAIT_UNTIL(etimer_expired(&delay));
 					packetbuf_copyfrom(&p,sizeof(struct my_packet));
 					runicast_send(&uc, &addr[i], MAX_RETRANSMISSIONS);
 				}
@@ -254,9 +260,10 @@ PROCESS_THREAD(main_process, ev, data)
 			for (i = 0; i < 2; i++) {
 				if (cmd[i] != 0) {
 					p.type = cmd[i];
+					etimer_set(&delay, CLOCK_SECOND * 3.5);
+				        PROCESS_WAIT_UNTIL(etimer_expired(&delay));
 					packetbuf_copyfrom(&p,sizeof(struct my_packet));
 					runicast_send(&uc, &addr[i], MAX_RETRANSMISSIONS);
-					printf("sent co2 cmd to sink #%d, addr=%u.%u\n", i, addr[i].u8[0], addr[i].u8[1]);
 				}
 			}
 		}
