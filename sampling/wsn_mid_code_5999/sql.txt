@@ -1,0 +1,29 @@
+ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
+create table humidity as (SELECT substring( timestamp, 11, 9 )as timestamp , substring( text, 10, 6 ) as Humid
+FROM `WsnMidTermCode_5999` WHERE text LIKE 'Humidity:%')
+sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
+
+create table temperature as (SELECT substring( timestamp, 11, 9 )as timestamp , substring( text, 16, 6 ) as Temp
+FROM `WsnMidTermCode_5999` WHERE text LIKE 'Temperature%')
+
+sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
+
+create table light as (SELECT substring( timestamp, 11, 9 )as timestamp , substring( text, 11, 6 ) as Light
+
+FROM `WsnMidTermCode_5999` WHERE text LIKE 'light/lux%')
+
+sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
+
+create table soil_peperomia (SELECT substring( timestamp, 11, 9 )as timestamp , substring( text, 25, 6 ) as Pepe_soil
+
+FROM `WsnMidTermCode_5999` WHERE text LIKE 'Peperomia Soil Moisture:%')
+
+ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
+create table soil_kalanchoe (SELECT substring( timestamp, 11, 9 )as timestamp , substring( text, 25, 6 ) as Kala_soil
+
+FROM `WsnMidTermCode_5999` WHERE text LIKE 'Kalanchoe Soil Moisture:%')
+
+ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
+create table co2 as (SELECT substring( timestamp, 11, 9 )as timestamp , substring( text, 9, 6 ) as co2
+
+FROM `WsnMidTermCode_5999` WHERE text LIKE 'co2 ppm%')
