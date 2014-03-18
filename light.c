@@ -21,16 +21,18 @@ void measure_light(uint8_t cmd[2])
 
 	for (i = 0; i < 2; i++) {
 		cmd[i] = 0;
-
+		printf("light state = %u\n", state_light[i]);
 		if(state_light[i] != LIGHT_LOW && raw_light < THRESHOLD_LIGHT[i]){
 			state_light[i] = LIGHT_LOW;
 			cmd[i] = LIGHT_LOW;
+			printf("cmd = light low, thats state %u\n", state_light[i]);
 			continue;
 		}
 		else if (state_light[i] != LIGHT_OK
 			&& raw_light >= THRESHOLD_LIGHT[i] + OFFSET_LIGHT) {
 			state_light[i] = LIGHT_OK;
 			cmd[i] = LIGHT_OK;
+			printf("cmd = light ok, thats state %u\n", state_light[i]);
 			continue;
 		}
 	}
