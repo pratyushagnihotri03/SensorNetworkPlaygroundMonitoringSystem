@@ -6,36 +6,33 @@ static double temperature = 20.0;
 
 void measure_light(uint8_t cmd[2])
 {
-	static uint32_t raw_light = 0;
+	static uint32_t raw_light;
 	static uint8_t i;
 	static uint16_t light;
 	static uint8_t state_light[2] = {LIGHT_OK, LIGHT_OK};
 
+	raw_light = 0;
 	for (i=0; i < 3; i++)
 		raw_light += (uint32_t)light_sensor.value(LIGHT_SENSOR_PHOTOSYNTHETIC);
 	raw_light /= 3;
 
 	light = (uint16_t)(((3125 * raw_light) >> 9) & 0xFFFF);
 	printf("Light/lux: %u\n", light);
-	printf("raw light: %u\n", (uint16_t)raw_light); 
 
 
 //------------------------------Light Actuators------------------------ //
 
 	for (i = 0; i < 2; i++) {
 		cmd[i] = 0;
-		printf("light state = %u\n", state_light[i]);
 		if(state_light[i] != LIGHT_LOW && raw_light < THRESHOLD_LIGHT[i]){
 			state_light[i] = LIGHT_LOW;
 			cmd[i] = LIGHT_LOW;
-			printf("cmd = light low, thats state %u\n", state_light[i]);
 			continue;
 		}
 		else if (state_light[i] != LIGHT_OK
 			&& raw_light >= THRESHOLD_LIGHT[i] + OFFSET_LIGHT) {
 			state_light[i] = LIGHT_OK;
 			cmd[i] = LIGHT_OK;
-			printf("cmd = light ok, thats state %u\n", state_light[i]);
 			continue;
 		}
 	}
@@ -45,11 +42,12 @@ void measure_light(uint8_t cmd[2])
 
 void measure_humidity()
 {
-	static uint32_t raw_humidity = 0;
+	static uint32_t raw_humidity;
 	static double humidity_val;
 	static uint8_t i;
    	static uint8_t state_humidity[2] = {HUMID_OK, HUMID_OK};
 
+	raw_humidity = 0;
 	for (i=0; i < 3; i++)
 		raw_humidity += sht11_sensor.value(SHT11_SENSOR_HUMIDITY);
 	raw_humidity /= 3;
@@ -93,11 +91,12 @@ void measure_humidity()
 
 void measure_temperature()
 {
-	static uint32_t raw_temp = 0;
+	static uint32_t raw_temp;
 	static uint8_t i;
 	static int temp2;
 	static uint8_t state_temp[2] = {TEMP_OK, TEMP_OK};
 
+	raw_temp = 0;
 	for (i=0; i < 3; i++)
 		raw_temp += sht11_sensor.value(SHT11_SENSOR_TEMP);
 	raw_temp /= 3;

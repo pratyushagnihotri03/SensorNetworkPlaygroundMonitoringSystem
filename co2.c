@@ -2,11 +2,12 @@
 
 void measure_co2(uint8_t cmd[2])
 {
-	static uint32_t raw = 0;
+	static uint32_t raw;
 	static double co2;
 	static uint8_t i;
 	static uint8_t state_co2[2] = {CO2_OK,CO2_OK};
 	
+	raw = 0;
 	for (i=0; i < 3; i++)
 		raw += ds1000_sensor.value(SENSOR_CO2);
 	raw /= 3;
