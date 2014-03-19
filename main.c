@@ -178,34 +178,15 @@ PROCESS_THREAD(main_process, ev, data)
 					p.type = cmd[i];
 					packetbuf_copyfrom(&p,sizeof(struct my_packet));
 					runicast_send(&uc, &addr[i], MAX_RETRANSMISSIONS);
-					etimer_set(&et, CLOCK_SECOND * SENDING_DELAY);
-					PROCESS_WAIT_UNTIL(etimer_expired(&et));
-				}
-			}
-
-			measure_temperature(cmd);
-			for (i = 0; i < 2; i++) {
-				if (cmd[i] != 0) {
-					p.type = cmd[i];
-					packetbuf_copyfrom(&p,sizeof(struct my_packet));
-					runicast_send(&uc, &addr[i], MAX_RETRANSMISSIONS);
-					etimer_set(&et, CLOCK_SECOND * SENDING_DELAY);
-				   PROCESS_WAIT_UNTIL(etimer_expired(&et));
-				}
-			}
-
-			measure_humidity(cmd);
-			for (i = 0; i < 2; i++) {
-				if (cmd[i] != 0) {
-					p.type = cmd[i];
-					if(i==1){
+					if (i == 0) {
 						etimer_set(&et, CLOCK_SECOND * SENDING_DELAY);
-				      PROCESS_WAIT_UNTIL(etimer_expired(&et));
+						PROCESS_WAIT_UNTIL(etimer_expired(&et));
 					}
-					packetbuf_copyfrom(&p,sizeof(struct my_packet));
-					runicast_send(&uc, &addr[i], MAX_RETRANSMISSIONS);
 				}
 			}
+
+			measure_temperature();
+			measure_humidity();
 		}
 		else if (my_id == ID_CO2) {
 			measure_co2(cmd);
