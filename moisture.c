@@ -1,13 +1,16 @@
 #include "moisture.h"
 
-void measure_moisture(uint16_t my_id)
+void measure_moisture(uint16_t my_id, uint8_t cmd[2])
 {
-	static uint16_t raw;
+	static uint32_t raw = 0;
 	static double voltage, moisture;
-	static uint8_t plant;
-        static uint8_t state_moisture[2];
+	static uint8_t plant, i;
+        static uint8_t state_moisture[2] = {MOIS_OK, MOIS_OK};
 
-	raw = vh400.value(ADC0);
+	for (i=0; i < 3; i++)
+		raw += vh400.value(ADC0);
+	raw /= 3;
+
 	voltage = 3 * raw / 4096.0;
 
 	if (voltage < 1.1)
@@ -30,6 +33,8 @@ void measure_moisture(uint16_t my_id)
 
 	printf ("Soil Moisture: %u.%u\n", (int)moisture, (int)(moisture * 100) % 100);
 
+	cmd[plant] = 0;
+
 //------------------------------MOISTURE Actuators------------------------ //
 	if(state_moisture[plant] != MOIS_LOW && raw < THRESHOLD_MOIS_LOW[plant]) {
 		state_moisture[plant] = MOIS_LOW;
@@ -38,14 +43,19 @@ void measure_moisture(uint16_t my_id)
 	}
 	else if (state_moisture[plant] != MOIS_HIGH && raw > THRESHOLD_MOIS_HIGH[plant]) {
 		state_moisture[plant] = MOIS_HIGH;
-		printf("%s Moisture high\n", plant_name[plant]);
+		cmd[plant] = MOIS_HIGH;
 		return;
 	}
-	else if (state_moisture[plant] != MOIS_OK
-			&& raw <= THRESHOLD_MOIS_HIGH[plant] - OFFSET_MOIST
+	else if (raw <= THRESHOLD_MOIS_HIGH[plant] - OFFSET_MOIST
 			&& raw >= THRESHOLD_MOIS_LOW[plant] + OFFSET_MOIST){
-		state_moisture[plant] = MOIS_OK;
-		printf("%s Moisture ok\n", plant_name[plant]);
+		if (state_moisture[plant] == MOIS_HIGH) {
+			state_moisture[plant] = MOIS_OK;
+			cmd[plant] = MOIS_OK;
+		}
+		else if (state_moisture[plant] == MOIS_LOW) {
+			state_moisture[plant] = MOIS_OK;
+			printf("%s Moisture ok\n", plant_name[plant]);
+		}
 		return;
 	}
 

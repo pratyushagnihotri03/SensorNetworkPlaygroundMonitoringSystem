@@ -2,12 +2,15 @@
 
 void measure_co2(uint8_t cmd[2])
 {
-	static uint16_t raw;
+	static uint32_t raw = 0;
 	static double co2;
 	static uint8_t i;
-	static uint8_t state_co2[2];
+	static uint8_t state_co2[2] = {CO2_OK,CO2_OK};
+	
+	for (i=0; i < 3; i++)
+		raw += ds1000_sensor.value(SENSOR_CO2);
+	raw /= 3;
 
-	raw = ds1000_sensor.value(SENSOR_CO2);
 	co2 = ((double)(raw/4096.0)*2.5 * 1000) - 200;
 //	printf("CO2_ADC: ", adc);
 //	printf("CO2_Raw_Voltage :", raw_voltage);  
@@ -27,11 +30,15 @@ void measure_co2(uint8_t cmd[2])
 			cmd[i] = CO2_HIGH;
 			continue;
 		}
-		else if (state_co2[i] != CO2_OK 
-			&& co2 <=THRESHOLD_CO2_HIGH[i] - OFFSET_CO2 
+		else if (co2 <=THRESHOLD_CO2_HIGH[i] - OFFSET_CO2 
 			&& co2 >= THRESHOLD_CO2_LOW[i] + OFFSET_CO2){
-			state_co2[i] = CO2_OK;
-			cmd[i] = CO2_OK;
+			if (state_co2[i] == CO2_LOW) {
+				state_co2[i] = CO2_OK;
+				printf("%s C02 ok\n", plant_name[i]);
+			} else if (state_co2[i] == CO2_HIGH) {
+				state_co2[i] = CO2_OK;
+				cmd[i] = CO2_OK;
+			}
 			continue;
 		}
 	}

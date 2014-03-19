@@ -38,7 +38,7 @@ extern const char * plant_name[];
 #define OFFSET_CO2 0//10
 
 #define MEASURING_PERIOD 5 //seconds
-
+#define SENDING_DELAY 1 //seconds
 
 /* unicast packet ptructure */ 
 struct my_packet{
