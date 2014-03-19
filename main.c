@@ -161,6 +161,7 @@ PROCESS_THREAD(main_process, ev, data)
 				packetbuf_copyfrom(&p,sizeof(struct my_packet));
 				runicast_send(&uc, &addr[RIGHT], MAX_RETRANSMISSIONS);
 			}
+			continue;
 		}
 		if (my_id == ID_MOIST_L) {
 			measure_moisture(my_id, cmd);
@@ -169,8 +170,9 @@ PROCESS_THREAD(main_process, ev, data)
 				packetbuf_copyfrom(&p,sizeof(struct my_packet));
 				runicast_send(&uc, &addr[LEFT], MAX_RETRANSMISSIONS);
 			}
+			continue;
 		}
-		else if (my_id == ID_LIGHT) {  //internal sensors node
+		if (my_id == ID_LIGHT) {  //internal sensors node
 			measure_light(cmd); 
 			for (i = 0; i < 2; i++) {
 				if (cmd[i] != 0) {
@@ -182,12 +184,13 @@ PROCESS_THREAD(main_process, ev, data)
 						PROCESS_WAIT_UNTIL(etimer_expired(&et));
 					}
 				}
+				continue;
 			}
 
 			measure_temperature();
 			measure_humidity();
 		}
-		else if (my_id == ID_CO2) {
+		if (my_id == ID_CO2) {
 			measure_co2(cmd);
 			for (i = 0; i < 2; i++) {
 				if (cmd[i] != 0) {
