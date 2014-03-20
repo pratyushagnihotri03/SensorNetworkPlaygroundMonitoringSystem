@@ -63,9 +63,9 @@ recv_runicast(struct runicast_conn *c, const rimeaddr_t *from, uint8_t seqno)
 
 	if(p->type == MOIS_OK) {
 		printf("MOSITURE OK! received from %d.%d\n",
-           from->u8[0], from->u8[1]);
+           		from->u8[0], from->u8[1]);
 		//Turning off the heater.
-   	printf("PG:HEAT OFF\n"); 
+   		printf("PG:HEAT OFF\n"); 
 		return;
 	}
 	if(p->type == MOIS_HIGH) {
