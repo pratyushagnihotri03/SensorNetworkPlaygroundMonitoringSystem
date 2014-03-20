@@ -13,7 +13,7 @@ void measure_light(uint8_t cmd[2])
 
 	raw_light = 0;
 	for (i=0; i < 3; i++)
-		raw_light += (uint32_t)light_sensor.value(LIGHT_SENSOR_PHOTOSYNTHETIC);
+		raw_light += (uint32_t)light_sensor.value(LIGHT_SENSOR_TOTAL_SOLAR); // changed as requested by iliya. better:PHOTOSYNTHETIC
 	raw_light /= 3;
 
 	light = (uint16_t)(((3125 * raw_light) >> 9) & 0xFFFF);
