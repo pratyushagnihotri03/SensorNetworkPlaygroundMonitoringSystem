@@ -11,7 +11,7 @@
 /* set threshold values for {RIGHT, LEFT} plant here */
 const double THRESHOLD_CO2_HIGH[] = { 950, 950 };
 const double THRESHOLD_CO2_LOW[] = { 40, 40 };
-const uint32_t THRESHOLD_LIGHT[] = { 250, 250 }; // only for testing purposes, requested by Iliya for final evaluation. real values:{ 220, 250 };
+const uint32_t THRESHOLD_LIGHT[] = { 160, 160 }; // only for testing purposes, requested by Iliya for final evaluation. real values:{ 220, 250 };
 const double THRESHOLD_TEMP_HIGH[] = {29,29};		//real values:{ 28, 29 };
 const double THRESHOLD_TEMP_LOW[] = {12.7,12.7};	//real values:{ 24, 12.7 };
 const uint16_t THRESHOLD_MOIS_LOW[] = {1502,1502};		//real:{ 1774, 1502 }; // 14.75 VWC, 10 VWC

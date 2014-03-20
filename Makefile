@@ -2,6 +2,10 @@ ifndef TARGET
 TARGET=xm1000
 endif
 
+DEFINES=NETSTACK_MAC=csma_driver,\
+ NETSTACK_RDC=xmac_driver,\
+ RF_CHANNEL=26
+
 CONTIKI_PROJECT = main
 all: $(CONTIKI_PROJECT)
 
