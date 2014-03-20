@@ -133,7 +133,7 @@ PROCESS_THREAD(main_process, ev, data)
 	}
 
 	if (my_id == ID_SINK_R || my_id == ID_SINK_L)
-		printf("PG:ENG\n");
+		printf("PG:END\n");
 
 	//wait for raspberry pi
 	etimer_set(&et, CLOCK_SECOND * (120 + offset));
