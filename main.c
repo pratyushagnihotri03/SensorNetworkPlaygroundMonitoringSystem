@@ -6,7 +6,7 @@
 #include "light.h"
 #include "co2.h"
 
-#define MAX_RETRANSMISSIONS 100
+#define MAX_RETRANSMISSIONS 10
 
 /* set threshold values for {RIGHT, LEFT} plant here */
 const double THRESHOLD_CO2_HIGH[] = { 950, 950 };
