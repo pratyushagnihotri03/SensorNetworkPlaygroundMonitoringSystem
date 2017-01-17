@@ -1,4 +1,4 @@
-# uMundo_distrubuted_app
+# Sensor Network Playground Monitoring System
 To build a sensing system for the plants in order to monitor their living conditions. As per the sensed
 values perform actuation and perform data visualization of the received sensed values.
 
